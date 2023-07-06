@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.263189448441247" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/bg_circular.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/bookmark_bottom_sheet_bg.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/floating_button_bg.xml" value="0.2025" />
+        <entry key="app/src/main/res/drawable/ic_add_location_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.2265" />
+        <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_bookmarks_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_clear_24.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_continue_24.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_start_end_24.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_turn_left_4.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_turn_right_7.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_turn_slight_left_3.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_direction_turn_slight_right_6.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_directions_black.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_layers_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_logout_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_map_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_marker_node_24.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_navigation_24.xml" value="0.3415" />
+        <entry key="app/src/main/res/drawable/ic_push_pin_red.xml" value="0.145" />
+        <entry key="app/src/main/res/drawable/ic_search_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_settings_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_water_drop_24.xml" value="0.145" />
+        <entry key="app/src/main/res/drawable/mapbox_ic_customize.xml" value="0.2025" />
+        <entry key="app/src/main/res/drawable/searchbox_roundcorner.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/zoom_button_bg_top_round.xml" value="0.3755" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29259259259259257" />
+        <entry key="app/src/main/res/layout/activity_mapbox_test_navigation.xml" value="0.30833333333333335" />
+        <entry key="app/src/main/res/layout/activity_permission_denied.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/bookmark_bottom_sheet_layout.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/bookmark_recycle_view.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_bookmarks.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2833200073242188" />
+        <entry key="app/src/main/res/layout/fragment_map_box_navigation.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_show_bookmark.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_test.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/map_fragment_direction_clear_dialog.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/layout/map_fragment_direction_clear_dialog_2.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/main_activity_toolbar_menue.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/menu_map_layout_option.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2025" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2025" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
