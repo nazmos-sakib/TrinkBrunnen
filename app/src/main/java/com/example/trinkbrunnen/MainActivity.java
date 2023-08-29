@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,11 +31,12 @@ import com.example.trinkbrunnen.Adaptar.BookmarksAdapter;
 import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
 import com.example.trinkbrunnen.Model.BookmarkLocationModel;
 import com.example.trinkbrunnen.Model.DialogPlus;
+import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
+import com.example.trinkbrunnen.Settings.SettingsFirstPage;
+import com.example.trinkbrunnen.databinding.ActivityMainBinding;
 import com.example.trinkbrunnen.fragments.Authentication.LoginFragment;
 import com.example.trinkbrunnen.fragments.MapFragment;
-import com.example.trinkbrunnen.Model.Map;
-import com.example.trinkbrunnen.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 
@@ -48,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
 
     //list of fragments
     public static MapFragment mapFragment;
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
 
     @Override
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         setContentView(binding.getRoot());
         initBottomNavView();
 
-        Map.getInstance(this);
+        MapSingleton.getInstance(this);
         //Map.getInstance(this,findViewById(R.id.mapViewMapFragment));
 
         //fragments init
@@ -97,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         Log.d(TAG, "initBottomNavView: started");
         //initial selected item
         binding.bottomNavigationViewMainActivity.setSelectedItemId(R.id.menu_items_map);
-        //initial fragment
-        //replaceFragment(new MapFragment(getApplicationContext()));
 
         binding.bottomNavigationViewMainActivity.setOnItemSelectedListener(item ->{
             switch (item.getItemId()){
@@ -113,8 +118,15 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                 case R.id.menu_items_add:
                     //
                     mapFragment.hideSearchComponent();
-                    mapFragment.addEventListenerOverlay();
                     //replaceFragment(new AddFragment(MainActivity.this));
+                    if (ParseUser.getCurrentUser()!=null){
+                        //this takes a callback function which will call shoeBookmarkBottomSheet
+                        mapFragment.addEventListenerOverlay();
+
+                    } else {
+                        replaceFragment(new LoginFragment(MainActivity.mapFragment));
+                        Snackbar.make(binding.getRoot(), "login to Add new water location to the Map", Snackbar.LENGTH_LONG).show();
+                    }
                     break;
                 case R.id.menu_items_map:
                     //
@@ -140,7 +152,8 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     //
                     mapFragment.removeEventListenerOverlay();
                     mapFragment.hideSearchComponent();
-                    //replaceFragment(new SettingsFragment());
+                    showSettingsBottomSheet();
+                    //replaceFragment(new SettingsFragments());
                     break;
                 default:
                     break;
@@ -148,6 +161,12 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
             return true;
         });
     } //end of initBottomNavView()
+
+
+    private void showSettingsBottomSheet(){
+        final SettingsFirstPage settingsFirstPage = new SettingsFirstPage(this);
+        settingsFirstPage.show();
+    }
 
 
     // Bookmark ----------------------------------------------------------
@@ -214,9 +233,9 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         //soft acknowledgement
         Snackbar snackbar =  Snackbar.make(binding.getRoot(),"Item Deleted",Snackbar.LENGTH_SHORT);
         snackbar.show();
-    }
-    // end of bookmark ----------------------------------------------------------
+    }// end of bookmark ----------------------------------------------------------
 
+    
     //change fragment in fragment container
     private void replaceFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction()

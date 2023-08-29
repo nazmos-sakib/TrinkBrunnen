@@ -40,6 +40,8 @@
     <string name="male_avatar_4">male_avater_4</string>
     <string name="male_avatar_3">male_avater_3</string>
     <string name="isFountainActive">Is the Fountain Currently Active?</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

@@ -15,22 +15,30 @@ import org.osmdroid.views.overlay.Marker;
 
 public class DialogPlus extends Dialog implements RecyclerViewClickListener {
     Context context;
+    MapSingleton mapSingleton;
     public DialogPlus(@NonNull Context context) {
         super(context);
         this.context = context;
+        try {
+            mapSingleton = MapSingleton.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onRecViewItemClick(BookmarkLocationModel locationModel) {
         Toast.makeText(getContext(), "position-> "+ locationModel.getLocationName(), Toast.LENGTH_SHORT).show();
-        Map.getInstance().getMapView().getController().setCenter(locationModel.getGeoPoint());
 
-        Marker startMarker = new Marker(Map.getInstance().getMapView());
+        mapSingleton.getMapView().getController().setCenter(locationModel.getGeoPoint());
+
+
+        Marker startMarker = new Marker(mapSingleton.getMapView());
         startMarker.setPosition(locationModel.getGeoPoint());
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         startMarker.setIcon(context.getDrawable(R.drawable.ic_baseline_bookmark_24));
         startMarker.setTitle("Start point");
-        Map.getInstance().getMapView().getOverlays().add(startMarker);
+        mapSingleton.getMapView().getOverlays().add(startMarker);
 
 
 

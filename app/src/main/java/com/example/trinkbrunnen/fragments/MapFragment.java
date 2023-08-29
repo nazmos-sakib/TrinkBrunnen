@@ -5,16 +5,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -34,23 +33,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.trinkbrunnen.BuildConfig;
 import com.example.trinkbrunnen.Callback.LocationLoadedCallback;
+import com.example.trinkbrunnen.Callback.StartActivityForResultCallback;
 import com.example.trinkbrunnen.Callback.UploadingBookmarkFinishCallback;
 import com.example.trinkbrunnen.MapboxTestNavigation;
+import com.example.trinkbrunnen.Model.CustomInfoWindow;
 import com.example.trinkbrunnen.Model.GeoPointExtra;
 import com.example.trinkbrunnen.Model.Map;
+import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
 import com.example.trinkbrunnen.R;
 import com.example.trinkbrunnen.databinding.FragmentMapBinding;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -62,13 +60,13 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapFragment extends Fragment implements LocationLoadedCallback, UploadingBookmarkFinishCallback {
+
+public class MapFragment extends Fragment implements LocationLoadedCallback, UploadingBookmarkFinishCallback, StartActivityForResultCallback {
     private static final String TAG = "MapFragment->";
 
     FragmentMapBinding binding;
@@ -79,6 +77,12 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
     public static GeoPoint mapCameraPosition=null;
 
     AlertDialog alertDialog;
+
+    //addToServer dialog box image view global variable
+    ImageView chosenImageDialogBOx;
+    //startActivityForResult
+    ActivityResultLauncher<String> mTakePhoto ;
+
 
     public MapFragment(Context ctx) {
         // Required empty public constructor
@@ -108,6 +112,19 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         //tile servers will get you banned based on this string
 
         //inflate and create the map
+
+        //opening image gallery to chose image.
+        mTakePhoto = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        chosenImageDialogBOx.setImageURI(result);
+                    }
+                }
+        );
+
+
     }
 
     @Override
@@ -125,15 +142,8 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         super.onViewCreated(view, savedInstanceState);
 
 
-        //Adjust the size of the cache on disk The primary usage is downloaded map tiles
-        //this will set the disk cache size in MB to 1GB , 9GB trim size
-        //OpenStreetMapTileProviderConstants. (1000L, 900L);
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-
-
         //map = Map.getInstance();
-        map = Map.getInstance(binding.mapViewMapFragment);
+        map = new  Map(binding.mapViewMapFragment,this);
 
         map.enableUserCurrentLocation(this,100);
         map.setDefaultConfiguration();
@@ -145,12 +155,12 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         map.initResources();
 
-        map.getMapView().getController().setZoom(15f);
+        map.setZoom(15f);
 
         if (mapCameraPosition==null){
-            map.getMapView().getController().setCenter(map.getMyLocationOverlay().getMyLocation());
+            map.setCenter(map.getMyLocationOverlay().getMyLocation());
         } else {
-            map.getMapView().getController().setCenter(mapCameraPosition);
+            map.setCenter(mapCameraPosition);
         }
 
 
@@ -178,7 +188,11 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.getMapView().onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        try {
+            MapSingleton.getInstance().getMapView().onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -188,7 +202,11 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
-        map.getMapView().onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        try {
+            MapSingleton.getInstance().getMapView().onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -198,9 +216,8 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         //current position. on click set map camera to users current location
         binding.fabStandPositionMainActivity.setOnClickListener(View -> {
-            map.getMapView().getOverlays().remove(map.getCompassOverlay());
-            map.getMapView().getController().setZoom(16f);
-            map.getMapView().getController().setCenter(map.getMyLocationOverlay().getMyLocation());
+            map.setZoom(16f);
+            map.setCenter(map.getMyLocationOverlay().getMyLocation());
         });
 
         //layer
@@ -272,7 +289,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
             }
         });
-    }
+    }//end of setFABClickListener
 
     private void setSearchViewClickedListener(){
         //search button
@@ -287,8 +304,8 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                     Address address = addresses.get(0);
                     GeoPoint geoPoint = new GeoPoint(address.getLatitude(), address.getLongitude());
                     Log.d(TAG, "setClickedListener: "+address.getCountryName());
-                    map.getMapView().getController().setZoom(12f);
-                    map.getMapView().getController().setCenter(geoPoint);
+                    map.setZoom(12f);
+                    map.setCenter(geoPoint);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -335,92 +352,36 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         double area = boundingBox.getLatitudeSpan() * boundingBox.getLongitudeSpan() * Math.cos(Math.toRadians(boundingBox.getCenter().getLatitude())) * 111.319;
         Log.d(TAG, "getNearByFountainLocation: ->calculating "+area);
 
+        ParseQuarries.fetchFountainLocation(location,
+                (objects)->{
 
-        ParseQuery<ParseObject> query = new ParseQuery<>("fountainLocation");
-        query.whereWithinKilometers("location",new ParseGeoPoint(location.getLatitude(),location.getLongitude()),30);
-        query.findInBackground((objects, e) -> {
-            if (e==null){
-                Log.d(TAG, "getNearByFountainLocation: -> object size"+objects.size());
-                for (ParseObject obj: objects){
+                    for (ParseObject obj: objects){
 
-                    Marker m = new Marker(map.getMapView());
-                    m.setId("fountain_marker");
-                    GeoPoint mLocation = new GeoPoint(obj.getParseGeoPoint("location").getLatitude(),obj.getParseGeoPoint("location").getLongitude());
-                    m.setPosition(mLocation);
-                    m.setTextLabelBackgroundColor(
-                            Color.TRANSPARENT
-                    );
-                    m.setTextLabelForegroundColor(
-                            Color.RED
-                    );
-                    m.setTitle(obj.getString("title"));
-                    m.setSubDescription(obj.getString("description"));
-                    m.setTextLabelFontSize(40);
-                    //m.setTextIcon("text");
-                    m.setIcon(getResources().getDrawable(R.drawable.ic_water_drop_24));
-                    m.setPanToView(true);
-                    m.setRotation(360f);
+                                Marker m = map.addMarker(
+                                new GeoPoint(obj.getParseGeoPoint("location").getLatitude(),obj.getParseGeoPoint("location").getLongitude()),
+                                "fountain_marker+"+obj.getObjectId(),
+                                obj.getString("title"),
+                                obj.getString("description"),
+                                true,
+                                obj.getParseFile("image")
+                        );
 
-
-                    ParseFile a = obj.getParseFile("image");
-                    a.getDataInBackground(new GetDataCallback() {
-                        @Override
-                        public void done(byte[] data, ParseException e) {
-                            if (e == null) {
-                                // The image data was successfully retrieved
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                // Use the bitmap as needed
-                                Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-
-                                m.setImage(drawable);
-
-                            } else {
-                                // There was an error retrieving the image data
-                                Log.e(TAG, "Error loading image data: " + e.getMessage());
-                            }
-                        }
-                    });
-
-                    /*m.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                        @Override
-                        public boolean onMarkerClick(Marker marker, MapView mapView) {
-                            return false;
-                        }
-                    });*/
-                    m.setDraggable(true);
-                    m.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
-                        @Override
-                        public void onMarkerDrag(Marker marker) {
-
-                        }
-
-                        @Override
-                        public void onMarkerDragEnd(Marker marker) {
-
-                        }
-
-                        @Override
-                        public void onMarkerDragStart(Marker marker) {
-                            showDialogOnMarkerLongClick(m);
-                        }
-                    });
-
-
-
-                    MarkerInfoWindow infoWindow = new MarkerInfoWindow(org.osmdroid.library.R.layout.bonuspack_bubble , map.getMapView());
+                /*    MarkerInfoWindow infoWindow = new MarkerInfoWindow(org.osmdroid.library.R.layout.bonuspack_bubble , map.getMapView());
                     m.setInfoWindow(infoWindow);
+                    */
+                        m.setInfoWindow(new CustomInfoWindow(map.getMapView(),
+                                ()->{
+                                    showDialogOnMarkerLongClick(m);
+                                }
+                                        ));
 
 
-                    m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                    map.getMapView().getOverlays()
-                            .add(m);
+                    }
 
-                }
-            } else {
-                Log.d(TAG, "getNearByFountainLocation->: null value");
-                //Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
+                });
+
     }
 
 
@@ -449,12 +410,12 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         // Inflate the view containing the EditText and Button
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout.map_fragment_direction_clear_dialog_2, null);
+        View view = inflater.inflate(R.layout.map_fragment_direction_bookmark_clear_dialog, null);
 
         // Set the view to the AlertDialog
         alertDialog.setView(view);
 
-        Button directionBtn = view.findViewById(R.id.btn_direction_map_dialog);
+        Button directionBtn = view.findViewById(R.id.btn_addToServer_map_dialog);
         directionBtn.setOnClickListener(View->{
             createDirection(m);
 
@@ -473,7 +434,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         */
 
         //if click dismiss alert dialog and and the marker overlay
-        Button addBookmark = view.findViewById(R.id.btn_bookmark_map_dialog);
+        Button addBookmark = view.findViewById(R.id.btn_clearMarker_map_dialog);
         addBookmark.setOnClickListener(View->{
             //Toast.makeText(ctx,"added",Toast.LENGTH_SHORT).show();
             binding.progressBarMapFragment.setVisibility(android.view.View.VISIBLE);
@@ -489,7 +450,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
     public void onBookmarkUploadFinish() {
         alertDialog.dismiss();
         binding.progressBarMapFragment.setVisibility(View.INVISIBLE);
-        Toast.makeText(ctx,"added",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),"added",Toast.LENGTH_SHORT).show();
     }
 
     public void createDirection(Marker m){
@@ -501,7 +462,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         waypoints.add(endPoint);
 
         //
-        ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_BIKE);
+        ((OSRMRoadManager)roadManager).setMean(OSRMRoadManager.MEAN_BY_FOOT);
 
 
         Road road = roadManager.getRoad(waypoints);
@@ -608,6 +569,10 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         }
     }
 
+    @Override
+    public void onActivityResultLauncher(ImageView imageView) {
+        chosenImageDialogBOx = imageView;
+        mTakePhoto.launch("image/*");
 
-
+    }
 }

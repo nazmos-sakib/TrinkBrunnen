@@ -10,22 +10,22 @@
     android:paddingEnd="10dp">
 
     <Button
-        android:id="@+id/btn_direction_map_dialog"
+        android:id="@+id/btn_addToServer_map_dialog"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="10dp"
         android:layout_weight="1"
-        android:drawableLeft="@drawable/ic_directions_black"
-        android:text="Show Direction"
+        android:drawableLeft="@drawable/ic_baseline_post_add_24"
+        android:text="Add to map"
         app:backgroundTint="#00897B" />
 
     <Button
-        android:id="@+id/btn_bookmark_map_dialog"
+        android:id="@+id/btn_clearMarker_map_dialog"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:drawableLeft="@drawable/ic_bookmarks_24"
-        android:text="Add to Bookmark"
+        android:drawableLeft="@drawable/ic_baseline_close_24"
+        android:text="Clear Marker"
         app:backgroundTint="#00897B" />
 
 </LinearLayout>

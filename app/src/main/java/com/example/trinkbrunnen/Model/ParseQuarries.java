@@ -1,8 +1,11 @@
 package com.example.trinkbrunnen.Model;
 
+import android.util.Log;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
+import com.example.trinkbrunnen.Callback.FountainLocationCallback;
 import com.example.trinkbrunnen.Callback.UploadingBookmarkFinishCallback;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
@@ -20,6 +23,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParseQuarries {
+
+    //
+    public static void fetchFountainLocation(GeoPoint location,FountainLocationCallback callback){
+        ParseQuery<ParseObject> query = new ParseQuery<>("fountainLocation");
+        query.whereWithinKilometers("location",new ParseGeoPoint(location.getLatitude(),location.getLongitude()),30);
+        query.findInBackground((objects, e) -> {
+            if (e==null){
+                callback.onFountainLocationFound(objects);
+            } else {
+                Log.d("TAG->", "getNearByFountainLocation->: null value");
+                //Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public static void fetchBookMarkDataFromServer(BookmarkReadyCallback callback){
         ArrayList<BookmarkLocationModel> arrayList = new ArrayList<>();

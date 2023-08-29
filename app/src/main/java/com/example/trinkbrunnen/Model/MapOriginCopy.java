@@ -2,13 +2,10 @@ package com.example.trinkbrunnen.Model;
 
 //import static androidx.core.app.ActivityCompat.startActivityForResult;
 
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -17,13 +14,10 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,20 +25,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.trinkbrunnen.Callback.LocationLoadedCallback;
-import com.example.trinkbrunnen.Callback.StartActivityForResultCallback;
 import com.example.trinkbrunnen.R;
-import com.example.trinkbrunnen.fragments.MapFragment;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -52,7 +37,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -69,7 +53,6 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.infowindow.InfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -77,11 +60,14 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.io.ByteArrayOutputStream;
 
 //Singleton
-public class Map  {
+public class MapOriginCopy {
 
-    private static final String TAG = "Map Class->";
+    private static final String TAG = "Map Model->";
     private static final int PICK_IMAGE_REQUEST_CODE = 9544;
 
+    private MapView mapView;
+    private Context context;
+    private Fragment fragment;
 
     private int defaultGpsUpdateTime = 100;
     private GpsMyLocationProvider gpsMyLocationProvider;
@@ -102,66 +88,77 @@ public class Map  {
     //addToServer dialog box image view global variable
     ImageView chosenImageDialogBOx;
 
-    //
-    StartActivityForResultCallback fragmentCallbackForLaunch;
+    private static MapOriginCopy instance;
 
+    //start class methods----------------------------------------------------------
+    private MapOriginCopy(){}
+    public static MapOriginCopy getInstance(Context ctx){
+        if (null==instance){
+            instance = new MapOriginCopy();
+        }
 
-    private MapSingleton mapInstance;
-
-    private Map(){}
-    public  Map(MapView mapView, StartActivityForResultCallback fragment){
-        mapInstance = MapSingleton.getInstance(mapView);
-        this.fragmentCallbackForLaunch = fragment;
-
-
+        instance.context = ctx;
+        return instance;
     }
 
+    public static MapOriginCopy getInstance(Context ctx, MapView mapView) {
+        if (null==instance){
+            instance = new MapOriginCopy();
+            instance.context = ctx;
+            instance.mapView = mapView;
+            instance.enableUserCurrentLocation2(instance.defaultGpsUpdateTime);
+            instance.setDefaultConfiguration();
+            instance.enableRotationGestureOverlay();
+            instance.addCompassOverlay();
+            instance.addScaleBarOverlay();
+        }
+        return instance;
+    }
 
+    public static MapOriginCopy getInstance(LocationLoadedCallback callback, MapView mapView) {
+        if (null!=instance){
+            instance.mapView = mapView;
+            instance.enableUserCurrentLocation(callback,instance.defaultGpsUpdateTime);
+            instance.setDefaultConfiguration();
+            instance.enableRotationGestureOverlay();
+            instance.addCompassOverlay();
+            instance.addScaleBarOverlay();
+        }
+        return instance;
+    }
+    public static MapOriginCopy getInstance(MapView mapView) {
+        instance.mapView = mapView;
+        return instance;
+    }
+
+    public static MapOriginCopy getInstance() {
+        return instance;
+    }
 
     public void setDefaultConfiguration(){
         this.setMAPNIKTileSource();
 
         //Changing the loading tile grid colors
-        mapInstance.getMapView().getOverlayManager().getTilesOverlay().setLoadingBackgroundColor(android.R.color.black);
-        mapInstance.getMapView().getOverlayManager().getTilesOverlay().setLoadingLineColor(Color.argb(255,0,255,0));
-        mapInstance.getMapView().getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        mapView.getOverlayManager().getTilesOverlay().setLoadingBackgroundColor(android.R.color.black);
+        mapView.getOverlayManager().getTilesOverlay().setLoadingLineColor(Color.argb(255,0,255,0));
+        mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
 
         //scales tiles to the current screen's DPI, helps with readability of labels
-        mapInstance.getMapView().setTilesScaledToDpi(true);
-        mapInstance.getMapView().setBuiltInZoomControls(true);
-        mapInstance.getMapView().setMultiTouchControls(true);
+        mapView.setTilesScaledToDpi(true);
+        mapView.setBuiltInZoomControls(true);
+        mapView.setMultiTouchControls(true);
 
         //change PersonIcon
         changePersonIcon(R.drawable.ic_navigation_24);
-
-        //only need this for single tap on map closes all open info window
-        mapInstance.getMapView().getOverlays().add(
-                new MapEventsOverlay(
-                        mapInstance.getContext(),
-                        new MapEventsReceiver() {
-                            @Override
-                            public boolean singleTapConfirmedHelper(GeoPoint p) {
-                                InfoWindow.closeAllInfoWindowsOn(mapInstance.getMapView());
-
-                                return false;
-                            }
-
-                            @Override
-                            public boolean longPressHelper(GeoPoint p) {
-                                return false;
-                            }
-                        }
-                )
-        );
 
     }
 
 
     public void enableUserCurrentLocation(LocationLoadedCallback callback, int gpsUpdateTime){
-        gpsMyLocationProvider = new GpsMyLocationProvider(mapInstance.getContext());
+        gpsMyLocationProvider = new GpsMyLocationProvider(context);
         gpsMyLocationProvider.setLocationUpdateMinTime(gpsUpdateTime); // [ms] // Set the minimum time interval for location updates
         //gpsMyLocationProvider.setLocationUpdateMinDistance(10000); // [m]  // Set the minimum distance for location updates
-        myLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, mapInstance.getMapView()){
+        myLocationOverlay = new MyLocationNewOverlay(gpsMyLocationProvider, mapView){
             @Override
             public void onLocationChanged(Location location, IMyLocationProvider source) {
                 super.onLocationChanged(location, source);
@@ -178,16 +175,16 @@ public class Map  {
         //myLocationOverlay.setPersonAnchor(-0.1f,0f);
         //most important.
         myLocationOverlay.enableFollowLocation();
-        mapInstance.getMapView().getOverlays().add(myLocationOverlay);
+        mapView.getOverlays().add(myLocationOverlay);
     }
 
     public void enableUserCurrentLocation2(int gpsUpdateTime){
-        mapController = mapInstance.getMapView().getController();
+        mapController = mapView.getController();
 
-        gpsMyLocationProvider2 = new GpsMyLocationProvider(mapInstance.getContext());
+        gpsMyLocationProvider2 = new GpsMyLocationProvider(context);
         gpsMyLocationProvider2.setLocationUpdateMinTime(gpsUpdateTime); // [ms] // Set the minimum time interval for location updates
 
-        myLocationOverlay2 = new MyLocationNewOverlay(gpsMyLocationProvider2, mapInstance.getMapView());
+        myLocationOverlay2 = new MyLocationNewOverlay(gpsMyLocationProvider2, mapView);
         myLocationOverlay2.setDrawAccuracyEnabled(true);
         myLocationOverlay2.enableMyLocation();
         myLocationOverlay2.enableFollowLocation();
@@ -196,42 +193,43 @@ public class Map  {
 
         //most important.
         myLocationOverlay2.enableFollowLocation();
-        mapInstance.getMapView().getOverlays().add(myLocationOverlay2);
+        mapView.getOverlays().add(myLocationOverlay2);
 
-        mapInstance.getMapView().getController().setZoom(15f);
-        mapInstance.getMapView().getController().setCenter(myLocationOverlay2.getMyLocation());
+        mapView.getController().setZoom(15f);
+        mapView.getController().setCenter(myLocationOverlay2.getMyLocation());
 
     }
+
 
 
     public void initResources(){
-        mapController = mapInstance.getMapView().getController();
-    }
+        mapController = mapView.getController();
 
+    }
 
     public void enableRotationGestureOverlay(){
         //enable rotation gestures
-        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(mapInstance.getContext(), mapInstance.getMapView());
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(context, mapView);
         mRotationGestureOverlay.setEnabled(true);
-        mapInstance.getMapView().setMultiTouchControls(true);
-        mapInstance.getMapView().getOverlays().add(mRotationGestureOverlay);
+        mapView.setMultiTouchControls(true);
+        mapView.getOverlays().add(mRotationGestureOverlay);
     }
 
     public void addCompassOverlay(){
-        mCompassOverlay = new CompassOverlay(mapInstance.getContext(), new InternalCompassOrientationProvider(mapInstance.getContext()), mapInstance.getMapView());
+        mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider(context), mapView);
         mCompassOverlay.enableCompass();
-        DisplayMetrics dm = mapInstance.getContext().getResources().getDisplayMetrics();
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
         mCompassOverlay.setCompassCenter( (float) dm.widthPixels/3-7f,200f);
         //mCompassOverlay.setCompassCenter( 100f,10f);
-        mapInstance.getMapView().getOverlays().add(mCompassOverlay);
+        mapView.getOverlays().add(mCompassOverlay);
     }
 
     public void addScaleBarOverlay(){
 
         //Map Scale bar overlay
         // how high above is the camera
-        DisplayMetrics dm = mapInstance.getContext().getResources().getDisplayMetrics();
-        mScaleBarOverlay = new ScaleBarOverlay(mapInstance.getMapView());
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        mScaleBarOverlay = new ScaleBarOverlay(mapView);
         mScaleBarOverlay.setCentred(true);
         // x,y position for setting the overlay
         mScaleBarOverlay.setScaleBarOffset(dm.widthPixels / 2, 20);
@@ -239,32 +237,32 @@ public class Map  {
         mScaleBarOverlay.setEnableAdjustLength(true);
         mScaleBarOverlay.enableScaleBar();
         //mScaleBarOverlay.
-        mapInstance.getMapView().getOverlays().add(mScaleBarOverlay);
+        mapView.getOverlays().add(mScaleBarOverlay);
     }
 
     public void addMiniMapOverlay(){
         //add the built-in Minimap
-        mMinimapOverlay = new MinimapOverlay(mapInstance.getContext(), mapInstance.getMapView().getTileRequestCompleteHandler());
-        DisplayMetrics dm = mapInstance.getContext().getResources().getDisplayMetrics();
+        mMinimapOverlay = new MinimapOverlay(context, mapView.getTileRequestCompleteHandler());
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
         mMinimapOverlay.setWidth(dm.widthPixels / 5);
         mMinimapOverlay.setHeight(dm.heightPixels / 5);
         mMinimapOverlay.setZoomDifference(3); // mini map 3 unit zoomed out than original view
         //optionally, you can set the minimap to a different tile source
         mMinimapOverlay.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-        mapInstance.getMapView().getOverlays().add(mMinimapOverlay);
+        mapView.getOverlays().add(mMinimapOverlay);
     }
 
     public void setDefaultTileSource(){
-        mapInstance.getMapView().setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
     }
     public void setMAPNIKTileSource(){
-        mapInstance.getMapView().setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
     }
     public void setUSGS_SATTileSource(){
-        mapInstance.getMapView().setTileSource(TileSourceFactory.USGS_SAT);
+        mapView.setTileSource(TileSourceFactory.USGS_SAT);
     }
     public void setUSGS_TOPOTileSource(){
-        mapInstance.getMapView().setTileSource(TileSourceFactory.USGS_TOPO);
+        mapView.setTileSource(TileSourceFactory.USGS_TOPO);
     }
     public void setCycleMapTileSource(){
         //mapView.setTileSource(TileSourceFactory.CYCLEMAP);
@@ -277,29 +275,27 @@ public class Map  {
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                InfoWindow.closeAllInfoWindowsOn(mapInstance.getMapView());
                 return false;
             }
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                Toast.makeText(mapInstance.getContext(),
+                Toast.makeText(context,
                         p.getLatitude() + ", " + p.getLongitude(),
                         Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "singleTapConfirmedHelper: geo point-> " + p.getLatitude() + ", " + p.getLongitude());
                 //mapController.setCenter(p);
-                Marker m = new Marker(mapInstance.getMapView());
+                Marker m = new Marker(mapView);
                 m.setPosition(p);
                 m.setTextLabelBackgroundColor(
                         Color.TRANSPARENT
                 );
-                m.setId("userDefinedMarker");
                 m.setTextLabelForegroundColor(
                         Color.RED
                 );
                 //m.setTitle("this is the best place");
                 m.setTextLabelFontSize(40);
-                m.setIcon(mapInstance.getContext().getResources().getDrawable(R.drawable.ic_push_pin_red));
+                m.setIcon(context.getResources().getDrawable(R.drawable.ic_push_pin_red));
 
                 m.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                     @Override
@@ -311,7 +307,7 @@ public class Map  {
                 });
 
                 m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                mapInstance.getMapView().getOverlays()
+                mapView.getOverlays()
                         .add(m);
 
 
@@ -319,18 +315,18 @@ public class Map  {
             }
         };
 
-        eventsListenerOverlay = new MapEventsOverlay(mapInstance.getContext(), mapEventsReceiver);
-        mapInstance.getMapView().getOverlays().add(eventsListenerOverlay);
+        eventsListenerOverlay = new MapEventsOverlay(context, mapEventsReceiver);
+        mapView.getOverlays().add(eventsListenerOverlay);
     }  //end of eventListenerOverlay
 
     public void removeEventListenerOverlay(){
-        if (mapInstance.getMapView().getOverlays().contains(eventsListenerOverlay)){
-            mapInstance.getMapView().getOverlays().remove(eventsListenerOverlay);
+        if (mapView.getOverlays().contains(eventsListenerOverlay)){
+            mapView.getOverlays().remove(eventsListenerOverlay);
         }
     }
 
     public void addZoomScrollListener(){
-        mapInstance.getMapView().addMapListener(new MapListener() {
+        instance.mapView.addMapListener(new MapListener() {
 
             @Override
             public boolean onScroll(ScrollEvent event) {
@@ -349,7 +345,7 @@ public class Map  {
     private void changePersonIcon(int drawableToSet){
 
         // Create a new BitmapDrawable with your desired icon image
-        Drawable iconDrawable = mapInstance.getContext().getResources().getDrawable(drawableToSet);
+        Drawable iconDrawable = context.getResources().getDrawable(drawableToSet);
         // Convert the VectorDrawable to a Bitmap
         Bitmap iconBitmap = Bitmap.createBitmap(iconDrawable.getIntrinsicWidth(), iconDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(iconBitmap);
@@ -364,7 +360,7 @@ public class Map  {
 
     //on marker single click call this function
     private void showAddClearDialog(Marker m) {
-        AlertDialog alertDialog  = new AlertDialog.Builder(mapInstance.getContext())
+        AlertDialog alertDialog  = new AlertDialog.Builder(context)
                 .setTitle("Add Current marker to server")
                 .setMessage("you can clear the marker by clicking CLEAR button. " +
                         "If you want to save this marker to the server, click add button")
@@ -378,7 +374,7 @@ public class Map  {
 
 
         // Inflate the view containing the EditText and Button
-        LayoutInflater inflater = LayoutInflater.from(mapInstance.getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.map_fragment_direction_add_clear_dialog, null);
 
         // Set the view to the AlertDialog
@@ -401,7 +397,7 @@ public class Map  {
         Button clearBtn = view.findViewById(R.id.btn_clearMarker_map_dialog);
         clearBtn.setOnClickListener(View->{
             alertDialog.dismiss();
-            mapInstance.getMapView().getOverlays().remove(m);
+            mapView.getOverlays().remove(m);
         });
 
         alertDialog.show();
@@ -410,32 +406,28 @@ public class Map  {
     private void showAddToServerDialog(Marker m, AlertDialog  firstDialog) {
         final boolean uploadSuccess = false;
         // Create the second AlertDialog object and set the title
-        AlertDialog locationDetailsDialog = new AlertDialog.Builder(mapInstance.getContext())
+        AlertDialog locationDetailsDialog = new AlertDialog.Builder(context)
                 .setTitle("Details")
                 .setMessage("you can clear the marker by clicking CLEAR button. " +
                         "If you want to add this location to the map click ADD button")
                 .create();
 
         // Inflate the view containing the EditText and Button
-        LayoutInflater inflater = LayoutInflater.from(mapInstance.getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.details_form_upload_to_server_dialog, null);
 
         // Set the view to the AlertDialog
         locationDetailsDialog.setView(view);
 
-
         //chose image to upload text view.
         TextView uploadImg = view.findViewById(R.id.tv_upload_dialogbox);
         uploadImg.setOnClickListener(View->{
-            //ChoseLocalImage();
-            //mTakePhoto.launch("image/*");
-            fragmentCallbackForLaunch.onActivityResultLauncher(view.findViewById(R.id.iv_locationPic_dialogbox));
+            ChoseLocalImage();
         });
 
         //show chosen image
         //defined in a global variable so that it can be accessed from onActivityResult function
         chosenImageDialogBOx = view.findViewById(R.id.iv_locationPic_dialogbox);
-
 
 
         //
@@ -504,7 +496,7 @@ public class Map  {
                             locationDetailsDialog.cancel();
                             //uploadSuccess = true;
                             firstDialog.cancel();
-                            mapInstance.getMapView().getOverlays().remove(m);
+                            mapView.getOverlays().remove(m);
                         } else {
                             e.getMessage();
                             e.getStackTrace();
@@ -534,18 +526,22 @@ public class Map  {
         locationDetailsDialog.show();
     }
 
+    // Method for starting the activity for selecting image from phone storage
+    public void ChoseLocalImage() {
+        //verifyStoragePermissions(getActivity());
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        //startActivityForResult(Intent.createChooser(intent, "Open Gallery"), PICK_IMAGE_REQUEST_CODE);
+    }
+
 
 
     public void setMiniMapZoomDifference(int z){
         mMinimapOverlay.setZoomDifference(z); // mini map 3 unit zoomed out than original view
     }
 
-    public void setCenter(GeoPoint point){
-        mapInstance.getMapView().getController().setCenter(point);
-    }
-
     public void setZoom(float z){
-        mapInstance.getMapView().getController().setZoom(z);
+        mapController.setZoom(z);
     }
 
     public void setGpsLocationUpdateDistance(int d){
@@ -556,6 +552,12 @@ public class Map  {
         gpsMyLocationProvider.setLocationUpdateMinTime(t);   // [ms] // Set the minimum time interval for location updates
     }
 
+
+
+
+    public Context getContext() {
+        return context;
+    }
 
     public GpsMyLocationProvider getGpsMyLocationProvider() {
         return gpsMyLocationProvider;
@@ -586,62 +588,7 @@ public class Map  {
         return eventsListenerOverlay;
     }
 
-    public MapView getMapView(){
-        return mapInstance.getMapView();
+    public MapView getMapView() {
+        return mapView;
     }
-
-    public Marker addMarker(GeoPoint location, String markerId, String title,String description, boolean isFountainMarker,ParseFile markerImage){
-        Marker m = new Marker(mapInstance.getMapView());
-        m.setId(markerId);
-        m.setPosition(location);
-
-        m.setTextLabelBackgroundColor(
-                Color.TRANSPARENT
-        );
-        m.setTextLabelForegroundColor(
-                Color.RED
-        );
-        m.setTitle(title);
-        m.setSubDescription(description);
-        m.setTextLabelFontSize(40);
-        //m.setTextIcon("text");
-
-        if (isFountainMarker){
-            m.setIcon(mapInstance.getContext().getResources().getDrawable(R.drawable.ic_water_drop_24));
-        } else {
-            m.setIcon(mapInstance.getContext().getResources().getDrawable(R.drawable.ic_push_pin_red));
-        }
-
-        if (markerImage!=null){
-            markerImage.getDataInBackground(new GetDataCallback() {
-                @Override
-                public void done(byte[] data, ParseException e) {
-                    if (e == null) {
-                        // The image data was successfully retrieved
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        // Use the bitmap as needed
-                        Drawable drawable = new BitmapDrawable(mapInstance.getContext().getResources(), bitmap);
-
-                        m.setImage(drawable);
-
-                    } else {
-                        // There was an error retrieving the image data
-                        Log.e(TAG, "Error loading image data: " + e.getMessage());
-                    }
-                }
-            });
-        }
-
-        m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-
-        mapInstance.getMapView().getOverlays().add(m);
-
-        return m;
-    }
-
-
-
-
-
 }

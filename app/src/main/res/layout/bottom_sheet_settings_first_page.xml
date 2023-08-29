@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:background="@drawable/bookmark_bottom_sheet_bg"
+    android:orientation="vertical"
+    android:paddingStart="10dp"
+
+    android:paddingEnd="10dp"
+    android:paddingBottom="30dp"
+    android:layout_marginBottom="60dp"
+    >
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="80dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center|center"
+        android:layout_marginBottom="30dp"
+        app:backgroundTint="@color/colorSecondary"
+        android:background="@color/colorSecondary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgView_accountAvatar_settingFragment"
+            android:layout_width="0dp"
+            android:layout_height="76dp"
+            android:layout_gravity="center|center"
+            android:layout_weight=".3"
+            android:background="@drawable/bg_circular"
+            android:src="@drawable/app_icon_water_fountain_icon"
+            app:tint="@color/mapbox_notification_turn_icon_shadow_color"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_welcome_settingFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:layout_weight=".7"
+            android:gravity="center|center"
+            android:text="Welcome to TrinkBrunnen"
+            android:textColor="#00897B"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".2"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tv_mailNotification_settingFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:text=""
+                android:textStyle="bold"
+                app:drawableRightCompat="@drawable/ic_baseline_mail_outline_24"
+                app:drawableTint="@color/colorSecondary" />
+
+            <Button
+                android:id="@+id/btn_signIn_settingFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+
+                android:text="Sign In"
+                app:backgroundTint="@color/fab_tint" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:background="@color/fab_tint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_contribution_settingFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:text="Contributions"
+            style="@style/SettingsOption"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:background="@color/fab_tint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_favorite_place_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="My Favorites places"
+            app:drawableLeftCompat="@drawable/ic_bookmarks_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary"/>
+
+        <TextView
+            android:id="@+id/tv_shareLocation_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Share My Location"
+            app:drawableLeftCompat="@drawable/ic_baseline_ios_share_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_offlineMap_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Offline Maps"
+            app:drawableLeftCompat="@drawable/ic_baseline_cloud_download_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_checkForUpdate_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Check for updates "
+            app:drawableLeftCompat="@drawable/ic_upload_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:orientation="vertical"
+        android:padding="10sp"
+        app:background="@color/fab_tint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_settings_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Settings"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_baseline_construction_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_privacyManagement_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Privacy management"
+            app:drawableLeftCompat="@drawable/ic_baseline_privacy_tip_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_aboutUs_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="About Us"
+            app:drawableLeftCompat="@drawable/ic_map_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_help_settingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Help"
+            app:drawableLeftCompat="@drawable/ic_baseline_help_outline_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+    </LinearLayout>
+
+</LinearLayout>

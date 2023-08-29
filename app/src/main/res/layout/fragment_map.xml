@@ -127,7 +127,9 @@
             android:inputType="textPersonName"
             android:paddingStart="5dp"
             android:paddingEnd="8dp"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck"
+            android:textColor="@color/black"
+            />
 
         <Button
             android:id="@+id/btn_search_searchView"

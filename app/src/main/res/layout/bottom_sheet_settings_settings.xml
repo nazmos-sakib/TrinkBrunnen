@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="60dp"
+    android:background="@drawable/bookmark_bottom_sheet_bg"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="80dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center|center"
+        android:layout_marginBottom="30dp"
+        app:backgroundTint="@color/colorSecondary"
+        android:background="@color/colorSecondary" />
+
+
+    <TextView
+        android:id="@+id/tv_contribution_settingFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:text="Settings"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorSecondary"
+
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:background="@color/fab_tint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_mapStyle_settingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Map Style"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_baseline_style_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_mapSetting_settingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Map settings"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_baseline_map_settings_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_navigationSettings_settingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Navigation Settings"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_navigation_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+        <TextView
+            android:id="@+id/tv_darkMode_settingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Dark Mode"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_baseline_darkmode_on_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary" />
+
+
+        <TextView
+            android:id="@+id/tv_distanceUnit_settingsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:drawablePadding="15dp"
+            android:gravity="center|start"
+            android:text="Distance Unit"
+            android:textColor="@color/colorSecondary"
+            app:drawableLeftCompat="@drawable/ic_baseline_measure_unit_24"
+            app:drawableRightCompat="@drawable/ic_baseline_chevron_right_24"
+            app:drawableTint="@color/colorSecondary" />
+    </LinearLayout>
+
+</LinearLayout>
