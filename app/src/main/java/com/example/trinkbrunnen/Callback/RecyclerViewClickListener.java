@@ -1,10 +1,8 @@
 package com.example.trinkbrunnen.Callback;
 
 
-import com.example.trinkbrunnen.Model.BookmarkLocationModel;
-
-import org.osmdroid.util.GeoPoint;
+import com.example.trinkbrunnen.Model.LocationModel;
 
 public interface RecyclerViewClickListener {
-    void onRecViewItemClick(BookmarkLocationModel bookmarkLocationModel);
+    void onRecViewItemClick(LocationModel bookmarkLocationModel);
 }

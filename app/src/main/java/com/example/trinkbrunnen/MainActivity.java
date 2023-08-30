@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,7 +28,7 @@ import android.widget.ProgressBar;
 
 import com.example.trinkbrunnen.Adaptar.BookmarksAdapter;
 import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
-import com.example.trinkbrunnen.Model.BookmarkLocationModel;
+import com.example.trinkbrunnen.Model.LocationModel;
 import com.example.trinkbrunnen.Model.DialogPlus;
 import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
@@ -173,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
     private BookmarksAdapter bookmarksAdapter;
     //for showing bookmark dialogs
     @Override
-    public void showBookmarkBottomSheet(ArrayList<BookmarkLocationModel> bookmarkLocationModelArrayList) {
+    public void showBookmarkBottomSheet(ArrayList<LocationModel> bookmarkLocationModelArrayList) {
 
         final DialogPlus dialog = new DialogPlus(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

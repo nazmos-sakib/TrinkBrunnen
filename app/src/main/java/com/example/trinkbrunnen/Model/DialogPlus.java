@@ -27,7 +27,7 @@ public class DialogPlus extends Dialog implements RecyclerViewClickListener {
     }
 
     @Override
-    public void onRecViewItemClick(BookmarkLocationModel locationModel) {
+    public void onRecViewItemClick(LocationModel locationModel) {
         Toast.makeText(getContext(), "position-> "+ locationModel.getLocationName(), Toast.LENGTH_SHORT).show();
 
         mapSingleton.getMapView().getController().setCenter(locationModel.getGeoPoint());
@@ -38,6 +38,7 @@ public class DialogPlus extends Dialog implements RecyclerViewClickListener {
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
         startMarker.setIcon(context.getDrawable(R.drawable.ic_baseline_bookmark_24));
         startMarker.setTitle("Start point");
+        startMarker.setId("userSavedMarker");
         mapSingleton.getMapView().getOverlays().add(startMarker);
 
 

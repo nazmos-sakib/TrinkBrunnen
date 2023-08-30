@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
+import com.example.trinkbrunnen.Callback.Callback;
 import com.example.trinkbrunnen.Callback.FountainLocationCallback;
 import com.example.trinkbrunnen.Callback.UploadingBookmarkFinishCallback;
 import com.parse.DeleteCallback;
@@ -24,6 +25,8 @@ import java.util.List;
 
 public class ParseQuarries {
 
+    private static final String TAG = "ParseQuarries->";
+
     //
     public static void fetchFountainLocation(GeoPoint location,FountainLocationCallback callback){
         ParseQuery<ParseObject> query = new ParseQuery<>("fountainLocation");
@@ -39,7 +42,7 @@ public class ParseQuarries {
     }
 
     public static void fetchBookMarkDataFromServer(BookmarkReadyCallback callback){
-        ArrayList<BookmarkLocationModel> arrayList = new ArrayList<>();
+        ArrayList<LocationModel> arrayList = new ArrayList<>();
         ParseUser currentUser = ParseUser.getCurrentUser();
         //SELECT * FROM 'TABLE' WHERE 'COLUMN' = 'VALUE' LIMIT 1 ; --implementation
         ParseQuery<ParseObject> query1  = new ParseQuery<ParseObject>("Bookmarks");
@@ -52,7 +55,7 @@ public class ParseQuarries {
                     if (objects.size()>0){
                         for (ParseObject object:objects){
                             //Log.d(TAG, "done: "+object.toString());
-                            BookmarkLocationModel b = new BookmarkLocationModel(
+                            LocationModel b = new LocationModel(
                                     object.getObjectId(),
                                     object.getString("user_id"),
                                     object.getString("title"),
@@ -66,6 +69,46 @@ public class ParseQuarries {
                         }
 
                         callback.showBookmarkBottomSheet(arrayList);
+
+                    }
+                }
+
+            }
+        });
+
+    }
+    public static void fetchContributionsDataFromServer(Callback callback){
+        ArrayList<LocationModel> arrayList = new ArrayList<>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        //SELECT * FROM 'TABLE' WHERE 'COLUMN' = 'VALUE' LIMIT 1 ; --implementation
+        ParseQuery<ParseObject> query1  = new ParseQuery<ParseObject>("fountainLocation");
+        query1.orderByDescending("createdAt");
+        query1.whereEqualTo("userWhoAddedThis",currentUser.getObjectId());
+        query1.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null){
+                    Log.d(TAG, "done: "+objects.size());
+                    if (objects.size()>0){
+                        for (ParseObject object:objects){
+                            //Log.d(TAG, "done: "+object.toString());
+                            LocationModel b = new LocationModel(
+                                    object.getObjectId(),
+                                    object.getString("userWhoAddedThis"),
+                                    object.getString("title"),
+                                    object.getString("description"),
+                                    object.getBoolean("isCurrentlyActive"),
+                                    object.getCreatedAt().toString(),
+                                    new GeoPoint(
+                                            object.getParseGeoPoint("location").getLatitude(),
+                                            object.getParseGeoPoint("location").getLongitude()
+                                    ),
+                                    object.getParseFile("image")
+                            );
+                            arrayList.add(b);
+                        }
+
+                        callback.onCallback((ArrayList<LocationModel>) arrayList);
 
                     }
                 }
@@ -96,7 +139,7 @@ public class ParseQuarries {
     }
 
     //Delete a Row--------------------------
-    public static void deleteBookmark(BookmarkReadyCallback callback, BookmarkLocationModel deletedObj, RecyclerView.ViewHolder viewHolder){
+    public static void deleteBookmark(BookmarkReadyCallback callback, LocationModel deletedObj, RecyclerView.ViewHolder viewHolder){
         ParseQuery<ParseObject> queryD = ParseQuery.getQuery("Bookmarks");
         queryD.getInBackground(deletedObj.getId(), new GetCallback<ParseObject>() { //objectId is the primary key
             @Override

@@ -44,4 +44,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
+    <string name="settingsContributionsIsActive">Is it currently active:</string>
+
+
 </resources>

@@ -1,4 +1,4 @@
-package com.example.trinkbrunnen.Settings;
+package com.example.trinkbrunnen.Settings.SubOptions;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -27,6 +27,8 @@ public class Settings extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         getWindow().setGravity(Gravity.BOTTOM);
+
+        show();
 
     }
 

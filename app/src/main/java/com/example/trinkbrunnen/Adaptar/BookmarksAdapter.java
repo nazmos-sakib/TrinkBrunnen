@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trinkbrunnen.Model.BookmarkLocationModel;
+import com.example.trinkbrunnen.Model.LocationModel;
 import com.example.trinkbrunnen.Callback.RecyclerViewClickListener;
 import com.example.trinkbrunnen.databinding.BookmarkRecycleViewBinding;
 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.ViewHolder>{
     private static final String TAG = "BookmarksAdapter->";
 
-    private ArrayList<BookmarkLocationModel> bookmarkLocationArrayList;
+    private ArrayList<LocationModel> bookmarkLocationArrayList;
     private RecyclerViewClickListener recyclerViewClickListener;
 
     public BookmarksAdapter(RecyclerViewClickListener recyclerViewClickListener) {
@@ -61,16 +61,21 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.View
 
 
     //getting clicked data
-    public BookmarkLocationModel getItemData(int position) {
+    public LocationModel getItemData(int position) {
         return bookmarkLocationArrayList.get(position);
     }
 
     //updating the data of the recView
     @SuppressLint("NotifyDataSetChanged")
-    public void setAdapterData(ArrayList<BookmarkLocationModel> bookmarkLocations) {
+    public void setAdapterData(ArrayList<LocationModel> bookmarkLocations) {
         Log.d(TAG, "setAdapterData: called. size-> "+bookmarkLocations.size());
         this.bookmarkLocationArrayList = bookmarkLocations;
         notifyDataSetChanged();
+    }
+
+
+    public ArrayList<LocationModel> getBookmarkLocationArrayList() {
+        return bookmarkLocationArrayList;
     }
 
     @Override
@@ -96,7 +101,4 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.View
         }
     }
 
-    public ArrayList<BookmarkLocationModel> getBookmarkLocationArrayList() {
-        return bookmarkLocationArrayList;
-    }
 }
