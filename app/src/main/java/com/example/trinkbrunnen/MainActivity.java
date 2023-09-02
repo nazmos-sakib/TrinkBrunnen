@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     //
                     mapFragment.removeEventListenerOverlay();
                     mapFragment.hideSearchComponent();
-                    onMapClickRemoveBookMark();
+                    onMapClickRemoveBookmarks();
                     replaceFragment(mapFragment);
                     break;
 
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         }
     }
 
-    public void onMapClickRemoveBookMark(){
+    public void onMapClickRemoveBookmarks(){
         try {
             List<Overlay> overlays = MapSingleton.getInstance().getMapView().getOverlays();
             for (Overlay o: overlays) {

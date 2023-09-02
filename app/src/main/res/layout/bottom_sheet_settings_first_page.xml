@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="600dp"
     android:layout_margin="10dp"
+    android:id="@+id/parent_settingsFirstPage"
+
     >
 <LinearLayout
     android:layout_width="match_parent"

@@ -18,13 +18,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trinkbrunnen.Adaptar.SettingsContributionsAdapter;
+import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
 import com.example.trinkbrunnen.Model.DialogPlus;
 import com.example.trinkbrunnen.Model.LocationModel;
 import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
 import com.example.trinkbrunnen.R;
+import com.example.trinkbrunnen.Settings.SubOptions.LogIn;
+import com.example.trinkbrunnen.Settings.SubOptions.MyFabPlaces;
 import com.example.trinkbrunnen.Settings.SubOptions.SubOptionsDialog;
 import com.example.trinkbrunnen.Settings.SubOptions.UserDetails;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 
 import org.osmdroid.api.IGeoPoint;
@@ -53,26 +57,29 @@ public class SettingsFirstPage extends Dialog {
 
     void subOptions(){
 
-        //user details
+        //user details------------------------------------------------------------------------------------------
         // if user  logged in include user details layout else include log in layout
         // get ahold of the instance of your layout
         LinearLayout dynamicContent = (LinearLayout) findViewById(R.id.includeLayout_settingsFirstPage);
         View view;
         if (ParseUser.getCurrentUser()!=null){
             UserDetails usrD = new UserDetails(ctx,dynamicContent);
+            //when log out button press, close SettingsFirstPage dialog
             usrD.init(
                     (E)->{
                         SettingsFirstPage.this.dismiss();
                     });
             view = usrD.getView();
         }else {
-            view = getLayoutInflater()
-                    .inflate(R.layout.bottom_sheet_settings_log_in, dynamicContent, false);
+            LogIn logIn = new LogIn(ctx,dynamicContent);
+            view = logIn.getView();
         }
         // add the inflated View to the layout
         dynamicContent.addView(view);
 
-        //contributions
+
+
+        //contributions------------------------------------------------------------------------------------------
         //onClicking the button it fetch  data from database.
         //the query function also take a callback function.
         // upon successfully acquiring data from server, it passes the data to "showSettingsContributionsBottomSheet()" function
@@ -82,26 +89,40 @@ public class SettingsFirstPage extends Dialog {
             }
         });
 
-        //My favorite places
+        //My favorite places------------------------------------------------------------------------------------------
+        //show bookmarks
         findViewById(R.id.tv_favorite_place_settingFragment).setOnClickListener(View->{
             this.dismiss();
-            SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_my_fav_place);
-            //settings.show();
 
-            optionsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            //do some action here
-                            SettingsFirstPage.this.show();
+            //fetch bookmark data from server.
+            //quarry function call "showBookMarkBottomSheet()" call-back function,
+            //MyFabPlace Class takes Context, RecAdapter data(from server) and a dialog close listener.
+            //The listener interface is for Dialog DismissListener
+            //onBookmarkDialogDismiss show settings again
+            if (ParseUser.getCurrentUser()!=null){
+                //this takes a callback function which will call shoeBookmarkBottomSheet
+                ParseQuarries.fetchBookMarkDataFromServer(
+                        new BookmarkReadyCallback() {
+                            @Override
+                            public void showBookmarkBottomSheet(ArrayList<LocationModel> bookmarkLocationModelArrayList) {
+                                //
+                                new MyFabPlaces(ctx,bookmarkLocationModelArrayList,
+                                         (dialogInterface)->{
+                                     SettingsFirstPage.this.show();
+                                 });
+                            }
+
+                            @Override
+                            public void onDeleteBookmark(RecyclerView.ViewHolder viewHolder) {
+
+                            }
                         }
-                    });
+                );
+            } else {
+                Snackbar.make(findViewById(R.id.parent_settingsFirstPage), "login to see bookmark", Snackbar.LENGTH_LONG).show();
+            }
 
-        });
-
-        //Share my location
-        findViewById(R.id.tv_shareLocation_settingFragment).setOnClickListener(View->{
-            /*this.dismiss();
-            SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_share_my_location);
+            /*SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_my_fav_place);
             //settings.show();
 
             optionsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -111,6 +132,11 @@ public class SettingsFirstPage extends Dialog {
                             SettingsFirstPage.this.show();
                         }
                     });*/
+
+        });
+
+        //Share my location------------------------------------------------------------------------------------------
+        findViewById(R.id.tv_shareLocation_settingFragment).setOnClickListener(View->{
 
             try {
                  IGeoPoint point = MapSingleton.getInstance().getMapView().getMapCenter();
