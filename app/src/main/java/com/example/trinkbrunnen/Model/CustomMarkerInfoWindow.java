@@ -10,9 +10,9 @@ import com.example.trinkbrunnen.Callback.MarkerInfoClickCallback;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
-public class CustomInfoWindow extends MarkerInfoWindow {
+public class CustomMarkerInfoWindow extends MarkerInfoWindow {
     MarkerInfoClickCallback callback;
-    public CustomInfoWindow(MapView mapView, MarkerInfoClickCallback callback) {
+    public CustomMarkerInfoWindow(MapView mapView, MarkerInfoClickCallback callback) {
         super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
 
         this.callback = callback;

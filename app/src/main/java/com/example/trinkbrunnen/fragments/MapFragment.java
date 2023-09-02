@@ -41,7 +41,7 @@ import com.example.trinkbrunnen.Callback.LocationLoadedCallback;
 import com.example.trinkbrunnen.Callback.StartActivityForResultCallback;
 import com.example.trinkbrunnen.Callback.UploadingBookmarkFinishCallback;
 import com.example.trinkbrunnen.MapboxTestNavigation;
-import com.example.trinkbrunnen.Model.CustomInfoWindow;
+import com.example.trinkbrunnen.Model.CustomMarkerInfoWindow;
 import com.example.trinkbrunnen.Model.GeoPointExtra;
 import com.example.trinkbrunnen.Model.Map;
 import com.example.trinkbrunnen.Model.MapSingleton;
@@ -369,7 +369,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                 /*    MarkerInfoWindow infoWindow = new MarkerInfoWindow(org.osmdroid.library.R.layout.bonuspack_bubble , map.getMapView());
                     m.setInfoWindow(infoWindow);
                     */
-                        m.setInfoWindow(new CustomInfoWindow(map.getMapView(),
+                        m.setInfoWindow(new CustomMarkerInfoWindow(map.getMapView(),
                                 ()->{
                                     showDialogOnMarkerLongClick(m);
                                 }
@@ -438,7 +438,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         addBookmark.setOnClickListener(View->{
             //Toast.makeText(ctx,"added",Toast.LENGTH_SHORT).show();
             binding.progressBarMapFragment.setVisibility(android.view.View.VISIBLE);
-            ParseQuarries.uploadNewBookmark(MapFragment.this,m.getPosition());
+            ParseQuarries.uploadNewBookmark(MapFragment.this,m.getTitle(),m.getPosition());
             //alertDialog.dismiss();
         });
 

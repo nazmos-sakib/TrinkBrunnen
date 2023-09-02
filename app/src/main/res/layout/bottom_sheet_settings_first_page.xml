@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="600dp"
+    android:layout_margin="10dp"
+    >
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
@@ -14,6 +21,8 @@
     android:layout_marginBottom="60dp"
     >
 
+
+
     <View
         android:id="@+id/divider"
         android:layout_width="80dp"
@@ -24,6 +33,7 @@
         android:background="@color/colorSecondary" />
 
     <LinearLayout
+        android:id="@+id/includeLayout_settingsFirstPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -31,58 +41,7 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/imgView_accountAvatar_settingFragment"
-            android:layout_width="0dp"
-            android:layout_height="76dp"
-            android:layout_gravity="center|center"
-            android:layout_weight=".3"
-            android:background="@drawable/bg_circular"
-            android:src="@drawable/app_icon_water_fountain_icon"
-            app:tint="@color/mapbox_notification_turn_icon_shadow_color"
 
-            />
-
-        <TextView
-            android:id="@+id/tv_welcome_settingFragment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:layout_weight=".7"
-            android:gravity="center|center"
-            android:text="Welcome to TrinkBrunnen"
-            android:textColor="#00897B"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".2"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/tv_mailNotification_settingFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:text=""
-                android:textStyle="bold"
-                app:drawableRightCompat="@drawable/ic_baseline_mail_outline_24"
-                app:drawableTint="@color/colorSecondary" />
-
-            <Button
-                android:id="@+id/btn_signIn_settingFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-
-                android:text="Sign In"
-                app:backgroundTint="@color/fab_tint" />
-
-
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -301,3 +260,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>

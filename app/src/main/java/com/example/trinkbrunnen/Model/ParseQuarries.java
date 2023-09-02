@@ -12,6 +12,7 @@ import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -118,9 +119,10 @@ public class ParseQuarries {
 
     }
 
-    public static void uploadNewBookmark(UploadingBookmarkFinishCallback callback, GeoPoint location){
+    public static void uploadNewBookmark(UploadingBookmarkFinishCallback callback,String title, GeoPoint location){
         //Score is the table name. if 'Score' does not exist then its create one.
         ParseObject score = new ParseObject("Bookmarks");
+        score.put("title",title); //Column name and value
         score.put("user_id",ParseUser.getCurrentUser().getObjectId()); //Column name and value
         score.put("location", new ParseGeoPoint(location.getLatitude(),location.getLongitude()));
         score.saveInBackground(new SaveCallback() { //upload file to the parse server
@@ -159,6 +161,35 @@ public class ParseQuarries {
                 }
             }
         });
+
+    }
+
+    public static void appendNewFountainLocation(String title, String description, GeoPoint location,boolean isActive,byte[] data, Callback callback){
+        ParseObject obj = new ParseObject("fountainLocation");
+        //ParseObject obj = new ParseObject("asd");
+        Log.d(TAG, "appendNewFountainLocation: ->adding to server");
+        obj.put("title",title);
+
+        obj.put("description",description);
+        obj.put("location",  new ParseGeoPoint(location.getLatitude(),location.getLongitude()));
+        obj.put("userWhoAddedThis", ParseUser.getCurrentUser().getObjectId());
+        obj.put("isCurrentlyActive",isActive);
+
+        if (null!=data){
+            ParseFile parseFile = new ParseFile("image-", data);
+            obj.put("image", parseFile);
+        }
+
+        obj.saveInBackground(e->{
+            if (e==null) { // no error occurred
+                Log.d(TAG, "parse server upload->done: -> Succeed");
+                callback.onCallback(null);
+            } else {
+                e.getMessage();
+                e.getStackTrace();
+            }
+        });
+
 
     }
 }

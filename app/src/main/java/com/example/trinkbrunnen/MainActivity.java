@@ -39,7 +39,11 @@ import com.example.trinkbrunnen.fragments.MapFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements BookmarkReadyCallback {
     private static final String TAG = "MainActivity->";
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     //
                     mapFragment.removeEventListenerOverlay();
                     mapFragment.hideSearchComponent();
+                    onMapClickRemoveBookMark();
                     replaceFragment(mapFragment);
                     break;
 
@@ -291,6 +296,21 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                 // Permission denied, handle the error or inform the user
                 startActivity(new Intent(MainActivity.this,PermissionDeniedActivity.class));
             }
+        }
+    }
+
+    public void onMapClickRemoveBookMark(){
+        try {
+            List<Overlay> overlays = MapSingleton.getInstance().getMapView().getOverlays();
+            for (Overlay o: overlays) {
+                if (o instanceof Marker && ((Marker) o).getId().equals("userSavedMarker")){
+                    MapSingleton.getInstance().getMapView().getOverlays().remove(o);
+                    MapSingleton.getInstance().getMapView().invalidate();
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

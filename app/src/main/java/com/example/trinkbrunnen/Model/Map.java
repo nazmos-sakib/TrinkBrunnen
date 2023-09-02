@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -283,9 +284,9 @@ public class Map  {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                Toast.makeText(mapInstance.getContext(),
+                /*Toast.makeText(mapInstance.getContext(),
                         p.getLatitude() + ", " + p.getLongitude(),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
                 Log.d(TAG, "singleTapConfirmedHelper: geo point-> " + p.getLatitude() + ", " + p.getLongitude());
                 //mapController.setCenter(p);
                 Marker m = new Marker(mapInstance.getMapView());
@@ -423,6 +424,8 @@ public class Map  {
         // Set the view to the AlertDialog
         locationDetailsDialog.setView(view);
 
+        ProgressBar pBar = view.findViewById(R.id.progressBar_dialogBox);
+
 
         //chose image to upload text view.
         TextView uploadImg = view.findViewById(R.id.tv_upload_dialogbox);
@@ -441,6 +444,7 @@ public class Map  {
         //
         Button btnSubmit = view.findViewById(R.id.btn_submit_dialogbox);
         btnSubmit.setOnClickListener(View->{
+            pBar.setVisibility(android.view.View.VISIBLE);
             Log.d(TAG, "showAddToServerDialog: -> submit button pressed");
             // Handle the save button click
             // Get the text from the EditText
@@ -469,48 +473,22 @@ public class Map  {
             if (title.isEmpty()){
                 warningEditView.setVisibility(android.view.View.VISIBLE);
             } else {
-                warningEditView.setVisibility(android.view.View.INVISIBLE);
-                Log.d(TAG, "showAddToServerDialog: -> before inserting");
-                //ParseObject fountainAddToServer = new ParseObject("testDemo");
-                ParseObject fountainAddToServer = new ParseObject("fountainLocation");
-                fountainAddToServer.put("title",title); //Column name and value
-                Log.d(TAG, "showAddToServerDialog: ->title-> "+title);
-                fountainAddToServer.put("description",description);
-                Log.d(TAG, "showAddToServerDialog: ->description-> "+description);
-
-                ParseGeoPoint pGeoPoint = new ParseGeoPoint( m.getPosition().getLatitude(), m.getPosition().getLongitude());
-                fountainAddToServer.put("location", pGeoPoint);
-                Log.d(TAG, "showAddToServerDialog: ->pGeoPoint-> "+ pGeoPoint.toString());
-
-                fountainAddToServer.put("userWhoAddedThis", ParseUser.getCurrentUser().getObjectId());
-                Log.d(TAG, "showAddToServerDialog: ->userWhoAddedThis-> "+ParseUser.getCurrentUser().getObjectId().toString());
-
-                fountainAddToServer.put("isCurrentlyActive",isFountainActiveView.isChecked());
-                Log.d(TAG, "showAddToServerDialog: ->isCurrentlyActive-> "+isFountainActiveView.isChecked());
-
-                //combining string and timestamp for naming file
-                //ParseFile parseFile = new ParseFile("image-"+new Timestamp(new Date().getTime()).toString(), data);
-                ParseFile parseFile = new ParseFile("image-", data);
-                fountainAddToServer.put("image", parseFile);
-                Log.d(TAG, "showAddToServerDialog: ->image-> "+parseFile.toString());
-
-
-                fountainAddToServer.saveInBackground(new SaveCallback() { //upload file to the parse server
-                    //using this call back function will return extra information like if it failed or succeed to upload the file
-                    @Override
-                    public void done(ParseException e) {
-                        if (e==null) { // no error occurred
+                ParseQuarries.appendNewFountainLocation(
+                        title,
+                        description,
+                        m.getPosition(),
+                        isFountainActiveView.isChecked(),
+                        data,
+                        (param)->{
+                            pBar.setVisibility(android.view.View.GONE);
                             Log.d(TAG, "parse server upload->done: -> Succeed");
                             locationDetailsDialog.cancel();
                             //uploadSuccess = true;
                             firstDialog.cancel();
                             mapInstance.getMapView().getOverlays().remove(m);
-                        } else {
-                            e.getMessage();
-                            e.getStackTrace();
                         }
-                    }
-                });
+                );
+
                 Log.d(TAG, "showAddToServerDialog: -> end of inserting");
             }
 

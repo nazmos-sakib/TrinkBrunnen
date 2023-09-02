@@ -3,6 +3,7 @@ package com.example.trinkbrunnen.Settings;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,9 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trinkbrunnen.Adaptar.SettingsContributionsAdapter;
 import com.example.trinkbrunnen.Model.DialogPlus;
 import com.example.trinkbrunnen.Model.LocationModel;
+import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
 import com.example.trinkbrunnen.R;
 import com.example.trinkbrunnen.Settings.SubOptions.SubOptionsDialog;
+import com.example.trinkbrunnen.Settings.SubOptions.UserDetails;
+import com.parse.ParseUser;
+
+import org.osmdroid.api.IGeoPoint;
 
 import java.util.ArrayList;
 
@@ -46,9 +53,33 @@ public class SettingsFirstPage extends Dialog {
 
     void subOptions(){
 
+        //user details
+        // if user  logged in include user details layout else include log in layout
+        // get ahold of the instance of your layout
+        LinearLayout dynamicContent = (LinearLayout) findViewById(R.id.includeLayout_settingsFirstPage);
+        View view;
+        if (ParseUser.getCurrentUser()!=null){
+            UserDetails usrD = new UserDetails(ctx,dynamicContent);
+            usrD.init(
+                    (E)->{
+                        SettingsFirstPage.this.dismiss();
+                    });
+            view = usrD.getView();
+        }else {
+            view = getLayoutInflater()
+                    .inflate(R.layout.bottom_sheet_settings_log_in, dynamicContent, false);
+        }
+        // add the inflated View to the layout
+        dynamicContent.addView(view);
+
         //contributions
+        //onClicking the button it fetch  data from database.
+        //the query function also take a callback function.
+        // upon successfully acquiring data from server, it passes the data to "showSettingsContributionsBottomSheet()" function
         findViewById(R.id.tv_contribution_settingFragment).setOnClickListener(View->{
-            ParseQuarries.fetchContributionsDataFromServer(locationArray -> showSettingsContributionsBottomSheet((ArrayList<LocationModel>) locationArray));
+            if (ParseUser.getCurrentUser()!=null){
+                ParseQuarries.fetchContributionsDataFromServer(locationArray -> showSettingsContributionsBottomSheet((ArrayList<LocationModel>) locationArray));
+            }
         });
 
         //My favorite places
@@ -69,7 +100,7 @@ public class SettingsFirstPage extends Dialog {
 
         //Share my location
         findViewById(R.id.tv_shareLocation_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_share_my_location);
             //settings.show();
 
@@ -79,7 +110,22 @@ public class SettingsFirstPage extends Dialog {
                             //do some action here
                             SettingsFirstPage.this.show();
                         }
-                    });
+                    });*/
+
+            try {
+                 IGeoPoint point = MapSingleton.getInstance().getMapView().getMapCenter();
+                String uri = "https://www.google.com/maps/search/?api=1&query=" +point.getLatitude()+","+point.getLongitude();
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT,"Check out the following location");
+                intent.putExtra(Intent.EXTRA_TEXT,uri);
+                ctx.startActivity(Intent.createChooser(intent,"Share Via"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
 
         });
 
@@ -178,8 +224,10 @@ public class SettingsFirstPage extends Dialog {
 
         });
     }
-    //for SettingsContributions ---------------------------------------------
 
+
+    //for SettingsContributions ---------------------------------------------
+    //this function create Dialog that implements a recycle view and show fountain location added by the user
     public void showSettingsContributionsBottomSheet(ArrayList<LocationModel> locationArray){
         this.dismiss();
         Log.d(TAG, "showSettingsContributionsBottomSheet: "+locationArray.size());
@@ -216,7 +264,6 @@ public class SettingsFirstPage extends Dialog {
                 SettingsFirstPage.this.show();
             }
         });
-
 
     }
 

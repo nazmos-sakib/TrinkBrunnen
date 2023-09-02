@@ -3,10 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.trinkbrunnen">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".ParseApp"
@@ -19,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Trinkbrunnen"
         tools:replace="android:allowBackup"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="true">
+
         <activity
             android:name=".MapboxTestNavigation"
             android:exported="false" />

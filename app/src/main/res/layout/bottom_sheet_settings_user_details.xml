@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="114dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    tools:src="@drawable/fountain"
+                    android:textColor="@color/colorSecondary"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_email_userDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:text="app.example@email.com"
+                    android:textColor="@color/colorSecondary"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_name_userDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text=".@userName"
+                    android:textColor="@color/colorSecondary"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account Settings"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorSecondary"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:background="@color/orange">
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Password:"
+                        android:textColor="@color/colorSecondary"
+                        />
+
+                    <EditText
+                        android:id="@+id/editTextTextPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/settings_linearlayout_border"
+                        android:ems="10"
+                        android:hint="old password"
+                        android:padding="10dp"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:textColor="@color/colorSecondary" />
+
+                    <EditText
+                        android:id="@+id/editTextTextPassword2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="new password"
+                        android:padding="10dp"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:textColor="@color/colorSecondary"
+                        android:background="@drawable/settings_linearlayout_border"
+                        />
+
+                    <EditText
+                        android:id="@+id/editTextTextPassword3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="retype password"
+                        android:padding="10dp"
+                        android:textColor="@color/colorSecondary"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:background="@drawable/settings_linearlayout_border"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_logOut_userDetails"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/bookmark_linearlayout_border"
+        android:drawablePadding="15dp"
+        android:gravity="center|start"
+        android:text="Log out"
+        android:textColor="@color/colorSecondary"
+        app:backgroundTint="@null"
+        app:drawableLeftCompat="@drawable/ic_baseline_account_circle_24"
+        app:drawableRightCompat="@drawable/ic_logout_24"
+        app:drawableTint="@color/colorSecondary" />
+
+
+</LinearLayout>
