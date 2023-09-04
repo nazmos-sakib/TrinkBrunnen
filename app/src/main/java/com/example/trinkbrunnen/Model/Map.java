@@ -3,10 +3,7 @@ package com.example.trinkbrunnen.Model;
 //import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,43 +14,26 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.example.trinkbrunnen.Callback.LocationLoadedCallback;
 import com.example.trinkbrunnen.Callback.StartActivityForResultCallback;
 import com.example.trinkbrunnen.R;
-import com.example.trinkbrunnen.fragments.MapFragment;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -385,7 +365,7 @@ public class Map  {
         // Set the view to the AlertDialog
         alertDialog.setView(view);
 
-        Button addBtn = view.findViewById(R.id.btn_addToServer_map_dialog);
+        Button addBtn = view.findViewById(R.id.btn_showDirection_map_dialog);
         addBtn.setOnClickListener(View->{
             //showAddToServerDialog(m,alertDialog);
 
@@ -409,7 +389,6 @@ public class Map  {
     }
 
     private void showAddToServerDialog(Marker m, AlertDialog  firstDialog) {
-        final boolean uploadSuccess = false;
         // Create the second AlertDialog object and set the title
         AlertDialog locationDetailsDialog = new AlertDialog.Builder(mapInstance.getContext())
                 .setTitle("Details")
@@ -419,7 +398,7 @@ public class Map  {
 
         // Inflate the view containing the EditText and Button
         LayoutInflater inflater = LayoutInflater.from(mapInstance.getContext());
-        View view = inflater.inflate(R.layout.details_form_upload_to_server_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_details_form_upload_to_server, null);
 
         // Set the view to the AlertDialog
         locationDetailsDialog.setView(view);

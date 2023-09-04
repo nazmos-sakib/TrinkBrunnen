@@ -380,7 +380,7 @@ public class MapOriginCopy {
         // Set the view to the AlertDialog
         alertDialog.setView(view);
 
-        Button addBtn = view.findViewById(R.id.btn_addToServer_map_dialog);
+        Button addBtn = view.findViewById(R.id.btn_showDirection_map_dialog);
         addBtn.setOnClickListener(View->{
             //showAddToServerDialog(m,alertDialog);
 
@@ -414,7 +414,7 @@ public class MapOriginCopy {
 
         // Inflate the view containing the EditText and Button
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.details_form_upload_to_server_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_details_form_upload_to_server, null);
 
         // Set the view to the AlertDialog
         locationDetailsDialog.setView(view);

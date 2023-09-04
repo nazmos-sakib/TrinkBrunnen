@@ -189,7 +189,42 @@ public class ParseQuarries {
                 e.getStackTrace();
             }
         });
+    }
 
+    public static void alterFountainData(String id,String title, String description, boolean isActive,byte[] data, Callback callback){
+
+        String objectID = id.split("\\+")[1];
+        Log.d(TAG, "alterFountainData: "+objectID);
+
+        //get the whole row of the data
+        ParseQuery<ParseObject> queryU  = new ParseQuery<ParseObject>("fountainLocation");
+        queryU.getInBackground(objectID, (obj, e) -> {
+            if (e == null) {
+                obj.put("title",title);
+
+                obj.put("description",description);
+                obj.put("userWhoUpdatedThis", ParseUser.getCurrentUser().getObjectId());
+                obj.put("isCurrentlyActive",isActive);
+
+                if (null!=data){
+                    ParseFile parseFile = new ParseFile("image-", data);
+                    obj.put("image", parseFile);
+                }
+                obj.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e==null){
+                            //update success
+                            callback.onCallback(null);
+                        } else {
+                            e.getStackTrace();
+                        }
+                    }
+                });
+            } else {
+
+            }
+        });
 
     }
 }

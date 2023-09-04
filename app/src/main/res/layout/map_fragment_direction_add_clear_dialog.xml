@@ -10,7 +10,7 @@
     android:paddingEnd="10dp">
 
     <Button
-        android:id="@+id/btn_addToServer_map_dialog"
+        android:id="@+id/btn_showDirection_map_dialog"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="10dp"

@@ -306,7 +306,7 @@ public class Map2 {
         // Set the view to the AlertDialog
         alertDialog.setView(view);
 
-        Button directionBtn = view.findViewById(R.id.btn_addToServer_map_dialog);
+        Button directionBtn = view.findViewById(R.id.btn_showDirection_map_dialog);
         directionBtn.setOnClickListener(View->{
             //showAddToServerDialog(m,alertDialog);
 

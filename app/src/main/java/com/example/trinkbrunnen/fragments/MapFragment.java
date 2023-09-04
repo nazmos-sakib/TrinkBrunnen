@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,7 +35,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trinkbrunnen.BuildConfig;
@@ -61,6 +67,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -369,24 +376,23 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                 /*    MarkerInfoWindow infoWindow = new MarkerInfoWindow(org.osmdroid.library.R.layout.bonuspack_bubble , map.getMapView());
                     m.setInfoWindow(infoWindow);
                     */
+                        //custom info window.
+                        //clicking anywhere in info window calls a callback function
                         m.setInfoWindow(new CustomMarkerInfoWindow(map.getMapView(),
                                 ()->{
-                                    showDialogOnMarkerLongClick(m);
+                                    showDialogOnMarkerSingleClick(m);
                                 }
-                                        ));
-
+                        ));
 
                     }
-
-
 
                 });
 
     }
 
 
-    //on marker single click call this function
-    private void showDialogOnMarkerLongClick(Marker m) {
+    //on marker infoWindow single click call this function
+    private void showDialogOnMarkerSingleClick(Marker m) {
         alertDialog  = new AlertDialog.Builder(ctx)
                 .setTitle("Find Direction")
                 .setMessage("you can clear the marker by clicking CLEAR button. " +
@@ -410,14 +416,22 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         // Inflate the view containing the EditText and Button
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout.map_fragment_direction_bookmark_clear_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_map_fragment_direction_edit_bookmark_clear, null);
 
         // Set the view to the AlertDialog
         alertDialog.setView(view);
 
-        Button directionBtn = view.findViewById(R.id.btn_addToServer_map_dialog);
+        Button directionBtn = view.findViewById(R.id.btn_showDirection_map_dialog);
         directionBtn.setOnClickListener(View->{
             createDirection(m);
+
+            alertDialog.cancel();
+
+        });
+
+        Button editBtn = view.findViewById(R.id.btn_editMarker_map_dialog);
+        editBtn.setOnClickListener(View->{
+            onEditMarker(m);
 
             alertDialog.cancel();
 
@@ -443,7 +457,112 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         });
 
         alertDialog.show();
-    } //end of showDialogOnMarkerLongClick()
+    } //end of showDialogOnMarkerSingleClick()
+
+    //
+    private void onEditMarker(Marker m){
+
+        AlertDialog editDialog = new AlertDialog.Builder(ctx)
+                .setTitle("Details")
+                .setMessage("you can clear the marker by clicking CLEAR button. " +
+                        "If you want to add this location to the map click ADD button")
+                .create();
+
+        // Inflate the view containing the EditText and Button
+        View view = LayoutInflater.from(ctx)
+                .inflate(R.layout.dialog_details_form_upload_to_server, null);
+
+        // Set the view to the AlertDialog
+        editDialog.setView(view);
+
+        ProgressBar pBar = view.findViewById(R.id.progressBar_dialogBox);
+
+        //set old title
+        EditText ev_title = view.findViewById(R.id.ev_title_diologbox);
+        ev_title.setText(m.getTitle());
+
+        //set old description
+        EditText ev_description = view.findViewById(R.id.ev_description_dialogbox);
+        ev_description.setText(m.getSubDescription());
+
+        //set old fountain active
+
+        //show chosen image
+        //defined in a global variable so that it can be accessed from onActivityResult function
+        chosenImageDialogBOx = view.findViewById(R.id.iv_locationPic_dialogbox);
+        chosenImageDialogBOx.setImageDrawable(m.getImage());
+
+        //chose image to upload text view.
+        TextView uploadImg = view.findViewById(R.id.tv_upload_dialogbox);
+        uploadImg.setOnClickListener(View->{
+            //ChoseLocalImage();
+            //mTakePhoto.launch("image/*");
+            onActivityResultLauncher(view.findViewById(R.id.iv_locationPic_dialogbox));
+        });
+
+        //
+        Button btnSubmit = view.findViewById(R.id.btn_submit_dialogbox);
+        btnSubmit.setOnClickListener(View->{
+            // Handle the save button click
+            pBar.setVisibility(android.view.View.VISIBLE);
+            Log.d(TAG, "showAddToServerDialog: -> submit button pressed");
+
+
+            String title = ev_title.getText().toString();
+            String description = ev_description.getText().toString();
+
+            //checking radioButton
+            RadioButton isFountainActiveView = view.findViewById(R.id.radioButtonYes_dialogbox);
+            //Boolean isFountainActive = isFountainActiveView.isChecked()? true
+
+
+            byte[] data = null;
+
+            if (chosenImageDialogBOx.getDrawable() != null){
+                Bitmap bitmap = ((BitmapDrawable) chosenImageDialogBOx.getDrawable()).getBitmap();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                data = baos.toByteArray();
+            }
+
+            if (title.isEmpty()){
+                // show warning
+                TextView warningEditView = view.findViewById(R.id.tv_warning_dialogbox);
+                warningEditView.setVisibility(android.view.View.VISIBLE);
+            } else {
+                ParseQuarries.alterFountainData(
+                        m.getId(),
+                        title,
+                        description,
+                        isFountainActiveView.isChecked(),
+                        data,
+                        (param)->{
+                            pBar.setVisibility(android.view.View.GONE);
+                            Log.d(TAG, "parse server upload->done: -> Succeed");
+                            //locationDetailsDialog.cancel();
+                            //uploadSuccess = true;
+                            editDialog.cancel();
+                            //mapInstance.getMapView().getOverlays().remove(m);
+                        }
+                );
+
+                Log.d(TAG, "showAddToServerDialog: -> end of inserting");
+            }
+
+        });
+
+
+
+        // upon clicking cancel button it will close this dialog box
+        Button btnCancel = view.findViewById(R.id.btn_cancel_dialogbox);
+        btnCancel.setOnClickListener(View->{
+            editDialog.cancel();
+        });
+
+        // Create and show the AlertDialog
+        editDialog.show();
+    }
 
 
     @Override
