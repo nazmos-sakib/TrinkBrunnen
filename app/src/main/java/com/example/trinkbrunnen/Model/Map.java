@@ -101,6 +101,7 @@ public class Map  {
 
     public void setDefaultConfiguration(){
         this.setMAPNIKTileSource();
+        //this.setDefaultTileSource();
 
         //Changing the loading tile grid colors
         mapInstance.getMapView().getOverlayManager().getTilesOverlay().setLoadingBackgroundColor(android.R.color.black);
@@ -108,7 +109,7 @@ public class Map  {
         mapInstance.getMapView().getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
 
         //scales tiles to the current screen's DPI, helps with readability of labels
-        mapInstance.getMapView().setTilesScaledToDpi(true);
+        //mapInstance.getMapView().setTilesScaledToDpi(true);
         mapInstance.getMapView().setBuiltInZoomControls(true);
         mapInstance.getMapView().setMultiTouchControls(true);
 
@@ -156,7 +157,7 @@ public class Map  {
         };
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setDrawAccuracyEnabled(true);
-        //myLocationOverlay.setPersonAnchor(-0.1f,0f);
+        //myLocationOverlay.setPersonAnchor(.5f,.5f);
         //most important.
         myLocationOverlay.enableFollowLocation();
         mapInstance.getMapView().getOverlays().add(myLocationOverlay);
@@ -341,6 +342,7 @@ public class Map  {
         paint.setColorFilter(filter);
         canvas.drawBitmap(iconBitmap, 0, 0, paint);
         myLocationOverlay.setPersonIcon( iconBitmap);
+        myLocationOverlay.setPersonAnchor(.5f,.5f);
     }
 
     //on marker single click call this function

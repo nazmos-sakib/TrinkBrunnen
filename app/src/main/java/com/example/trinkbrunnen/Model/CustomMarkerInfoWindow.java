@@ -6,45 +6,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.trinkbrunnen.Callback.MarkerInfoClickCallback;
+import com.example.trinkbrunnen.R;
 
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 public class CustomMarkerInfoWindow extends MarkerInfoWindow {
-    MarkerInfoClickCallback callback;
+
     public CustomMarkerInfoWindow(MapView mapView, MarkerInfoClickCallback callback) {
-        super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+        //super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+        super(R.layout.marker_custom_info_window, mapView);
 
-        this.callback = callback;
-
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_image).setOnClickListener(View->{
-            callACallback();
-        });
-
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_title).setOnClickListener(View->{
-            callACallback();
-        });
-
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setOnClickListener(View->{
-            callACallback();
-        });
-
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_description).setOnClickListener(View->{
-            callACallback();
-        });
-
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_subdescription).setOnClickListener(View->{
-            callACallback();
-        });
-
-        mView.setOnClickListener(View->{
-            callACallback();
+        mView.findViewById(R.id.parentLayout_marker_info).setOnClickListener(View->{
+            callback.onMarkerInfoWindowClick();
         });
     }
 
-
-    void callACallback(){
-        Log.d("CustomInfoWindow->", "onClick: ");
-        callback.onMarkerInfoWindowClick();
-    }
 }

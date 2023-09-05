@@ -102,12 +102,12 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         //handle permissions first, before map is created. not depicted here
 
-        //load/initialize the osmdroid configuration, this can be done
-        Configuration.getInstance().load(this.ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         //Adjust the size of the cache on disk The primary usage is downloaded map tiles
         //this will set the disk cache size in MB to 1GB , 9GB trim size
         //OpenStreetMapTileProviderConstants. (1000L, 900L);
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+        //load/initialize the osmdroid configuration, this can be done
+        Configuration.getInstance().load(this.ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         Configuration.getInstance().setOsmdroidBasePath(ctx.getCacheDir());
         Configuration.getInstance().setOsmdroidTileCache(ctx.getCacheDir());
 
@@ -248,10 +248,12 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                         case R.id.menu_layout_standArd:
                             // Do something when option 1 is clicked
                             map.setDefaultTileSource();
+                            map.getMapView().invalidate();
                             return true;
                         case R.id.menu_layout_satellite:
                             // Do something when option 2 is clicked
                             map.setUSGS_SATTileSource();
+                            map.getMapView().invalidate();
                             return true;
                         case R.id.menu_layout_cancel:
                             // Do something when option 2 is clicked
@@ -262,6 +264,16 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                 }
             });
             popupMenu.show();
+        });
+
+        //clear direction marker
+        //set navigation fab to invisible and set itself invisible
+        binding.fabClearDirectionMapFragment.setOnClickListener(View->{
+            onDirectionClearMarker();
+            map.getMapView().invalidate();
+            binding.fabClearDirectionMapFragment.setVisibility(android.view.View.INVISIBLE);
+            binding.fabNavigate.setVisibility(android.view.View.INVISIBLE);
+
         });
 
 
@@ -349,6 +361,8 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
 
 
+    //callback function from class Map.enableUserCurrentLocation() function
+    //when a precise location is found fetch available fountain location within range of 30 kilometer
     @Override
     public void onLocationLoaded(GeoPoint location) {
 
@@ -388,7 +402,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
                 });
 
-    }
+    }//end of onLocationLoad()
 
 
     //on marker infoWindow single click call this function
@@ -609,6 +623,8 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         }
 
         map.getMapView().invalidate();
+        binding.fabClearDirectionMapFragment.setVisibility(View.VISIBLE);
+        binding.fabNavigate.setVisibility(View.VISIBLE);
     }
 
     public Drawable getManeuverDrawable(int maneuverType){
@@ -645,7 +661,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                 onDirectionClearMarker();
             }
         }
-        //binding.map.invalidate();
+        //map.getMapView().invalidate();
         destination = null;
     }
 
