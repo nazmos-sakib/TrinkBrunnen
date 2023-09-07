@@ -167,7 +167,7 @@ public class MapOriginCopy {
                 //mapController.setZoom(13f);
                 //mapController.setCenter(new GeoPoint(location));
                 Log.d(TAG, "onLocationChanged: "+location.toString());
-                callback.onLocationLoaded(new GeoPoint(location));
+                //callback.onLocationLoaded(new GeoPoint(location));
             }
         };
         myLocationOverlay.enableMyLocation();

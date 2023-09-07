@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -49,6 +51,7 @@ import com.example.trinkbrunnen.Callback.UploadingBookmarkFinishCallback;
 import com.example.trinkbrunnen.MapboxTestNavigation;
 import com.example.trinkbrunnen.Model.CustomMarkerInfoWindow;
 import com.example.trinkbrunnen.Model.GeoPointExtra;
+import com.example.trinkbrunnen.Model.LocalStorageData;
 import com.example.trinkbrunnen.Model.Map;
 import com.example.trinkbrunnen.Model.MapSingleton;
 import com.example.trinkbrunnen.Model.ParseQuarries;
@@ -89,6 +92,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
     ImageView chosenImageDialogBOx;
     //startActivityForResult
     ActivityResultLauncher<String> mTakePhoto ;
+
+    boolean mTrackingMode = false;
+    boolean isFountainMarkerLoaded = false;
 
 
     public MapFragment(Context ctx) {
@@ -131,6 +137,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                 }
         );
 
+        //
+        isFountainMarkerLoaded = false;
+
 
     }
 
@@ -164,11 +173,13 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         map.setZoom(15f);
 
+/*
         if (mapCameraPosition==null){
             map.setCenter(map.getMyLocationOverlay().getMyLocation());
         } else {
             map.setCenter(mapCameraPosition);
         }
+*/
 
 
         //map.addZoomScrollListener();
@@ -200,6 +211,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //enable getting user current location
+        map.getMyLocationOverlay().enableMyLocation();
     }
 
     @Override
@@ -214,6 +228,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //disable consistently getting user current location
+        map.getMyLocationOverlay().disableMyLocation();
     }
 
 
@@ -225,6 +242,16 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         binding.fabStandPositionMainActivity.setOnClickListener(View -> {
             map.setZoom(16f);
             map.setCenter(map.getMyLocationOverlay().getMyLocation());
+        });
+
+        //mTrackingMode
+        binding.fabFollowUser.setOnClickListener(View->{
+            mTrackingMode = !mTrackingMode;
+            if (mTrackingMode){
+                binding.fabFollowUser.setImageResource(R.drawable.ic_foloow_enable_24);
+            } else {
+                binding.fabFollowUser.setImageResource(R.drawable.ic_follow_disabled_24);
+            }
         });
 
         //layer
@@ -325,6 +352,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                     Log.d(TAG, "setClickedListener: "+address.getCountryName());
                     map.setZoom(12f);
                     map.setCenter(geoPoint);
+                    if(distanceBtnTwoGeoPoint(LocalStorageData.getLocalLocationData(),geoPoint)>10){
+                        addFountainMarkersToMapView(geoPoint);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -359,12 +389,78 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         });
     }
 
+    double mSpeed = 0.0;
+    float mAzimuthAngleSpeed;
+
+    public void azimuCalculation(Location location){
+
+        GeoPoint prevLocation = map.getMyLocationOverlay().getMyLocation();
+        map.getDirectedLocationOverlay().setLocation (new GeoPoint(location));
+        map.getDirectedLocationOverlay().setAccuracy((int) location.getAccuracy());
+
+        if (prevLocation != null && location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+            mSpeed = location.getSpeed() * 3.6;
+            long speedInt = Math.round(mSpeed);
+            TextView speedTxt = binding.tvSpeedMapFragment;
+            speedTxt.setText(speedInt + " km/h");
+
+            //TODO: check if speed is not too small
+            if (mSpeed >= 0.1) {
+                mAzimuthAngleSpeed = location.getBearing();
+                map.getDirectedLocationOverlay().setBearing(mAzimuthAngleSpeed);
+            }
+        }
+
+        if (mTrackingMode) {
+            //keep the map view centered on current location:
+            map.getMapView().getController().animateTo(new GeoPoint(location));
+            map.getMapView().setMapOrientation(-mAzimuthAngleSpeed);
+        } else {
+            //just redraw the location overlay:
+            map.getMapView().invalidate();
+        }
+
+
+
+    }
+
 
 
     //callback function from class Map.enableUserCurrentLocation() function
     //when a precise location is found fetch available fountain location within range of 30 kilometer
     @Override
-    public void onLocationLoaded(GeoPoint location) {
+    public void onLocationLoaded(Location location) {
+
+        //if there is no previous location search for fountain location for current location
+        //if previous location is found check if fountain location have already retrieved or not
+        GeoPoint previousLocation = LocalStorageData.getLocalLocationData();
+
+        if (previousLocation!=null){
+            if (!isFountainMarkerLoaded){
+                //in Shared Preference previous location found
+                //but the fragment reloaded of open newly.
+                //need to retrieved fountain locations
+                addFountainMarkersToMapView(new GeoPoint(location));
+                map.setCenter(new GeoPoint(location));
+            }
+            //if the distance is not 0 then the user moved and we need to change map center
+            //change previous location to new location
+            if (distanceBtnTwoGeoPoint(new GeoPoint(location),previousLocation)>0 && mTrackingMode){
+                map.setCenter(new GeoPoint(location));
+                LocalStorageData.setLocalLocationData(new GeoPoint(location));
+            }
+
+        } else {
+            Log.d(TAG, "onLocationLoaded:-> no previous location found");
+            LocalStorageData.setLocalLocationData(new GeoPoint(location));
+            map.setCenter(new GeoPoint(location));
+            addFountainMarkersToMapView(new GeoPoint(location));
+            azimuCalculation(location);
+            return;
+        }
+
+        azimuCalculation(location);
+
 
         // get the bounding box of the visible area
         BoundingBox boundingBox = map.getMapView().getBoundingBox();
@@ -373,12 +469,17 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         double area = boundingBox.getLatitudeSpan() * boundingBox.getLongitudeSpan() * Math.cos(Math.toRadians(boundingBox.getCenter().getLatitude())) * 111.319;
         Log.d(TAG, "getNearByFountainLocation: ->calculating "+area);
 
+
+
+    }//end of onLocationLoad()
+
+    private void addFountainMarkersToMapView(GeoPoint location){
         ParseQuarries.fetchFountainLocation(location,
                 (objects)->{
 
                     for (ParseObject obj: objects){
 
-                                Marker m = map.addMarker(
+                        Marker m = map.addMarker(
                                 new GeoPoint(obj.getParseGeoPoint("location").getLatitude(),obj.getParseGeoPoint("location").getLongitude()),
                                 "fountain_marker+"+obj.getObjectId(),
                                 obj.getString("title"),
@@ -399,10 +500,10 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                         ));
 
                     }
+                    isFountainMarkerLoaded = true;
 
                 });
-
-    }//end of onLocationLoad()
+    } //end of addFountainMarkersToMapView()
 
 
     //on marker infoWindow single click call this function
@@ -576,7 +677,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         // Create and show the AlertDialog
         editDialog.show();
-    }
+    } //end onEditMarker()
 
 
     @Override
@@ -709,5 +810,39 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         chosenImageDialogBOx = imageView;
         mTakePhoto.launch("image/*");
 
+    }
+    /**
+     * Calculate distance between two points in latitude and longitude taking
+     * into account height difference. If you are not interested in height
+     * difference pass 0.0. Uses Haversine method as its base.
+     *
+     * lat1, lon1 Start point lat2, lon2 End point el1 Start altitude in meters
+     * el2 End altitude in meters
+     * @returns Distance in Meters
+     */
+    public static double distanceBtnTwoGeoPoint(GeoPoint location1 , GeoPoint location2) {
+
+        double lat1 = location1.getLatitude();
+        double lat2 = location2.getLatitude();
+        double lon1 = location1.getLongitude();
+        double lon2 = location2.getLongitude();
+        double el1 = 0.0;
+        double el2 = 0.0;
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = el1 - el2;
+
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+        return Math.sqrt(distance);
     }
 }

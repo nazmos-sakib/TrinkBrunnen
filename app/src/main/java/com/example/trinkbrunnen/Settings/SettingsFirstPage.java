@@ -122,17 +122,6 @@ public class SettingsFirstPage extends Dialog {
                 Snackbar.make(findViewById(R.id.parent_settingsFirstPage), "login to see bookmark", Snackbar.LENGTH_LONG).show();
             }
 
-            /*SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_my_fav_place);
-            //settings.show();
-
-            optionsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            //do some action here
-                            SettingsFirstPage.this.show();
-                        }
-                    });*/
-
         });
 
         //Share my location------------------------------------------------------------------------------------------
@@ -157,7 +146,7 @@ public class SettingsFirstPage extends Dialog {
 
         //Offline Maps
         findViewById(R.id.tv_offlineMap_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_offline_map);
             //settings.show();
 
@@ -167,13 +156,13 @@ public class SettingsFirstPage extends Dialog {
                             //do some action here
                             SettingsFirstPage.this.show();
                         }
-                    });
+                    });*/
 
         });
 
         //check for updates
         findViewById(R.id.tv_checkForUpdate_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_check_for_update);
             //settings.show();
 
@@ -183,7 +172,7 @@ public class SettingsFirstPage extends Dialog {
                             //do some action here
                             SettingsFirstPage.this.show();
                         }
-                    });
+                    });*/
 
         });
 
@@ -205,7 +194,7 @@ public class SettingsFirstPage extends Dialog {
 
         //privacy
         findViewById(R.id.tv_privacyManagement_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_privacy);
             //settings.show();
 
@@ -215,13 +204,13 @@ public class SettingsFirstPage extends Dialog {
                     //do some action here
                     SettingsFirstPage.this.show();
                 }
-            });
+            });*/
 
         });
 
         //privacy
         findViewById(R.id.tv_aboutUs_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_about_us);
             //settings.show();
 
@@ -231,12 +220,13 @@ public class SettingsFirstPage extends Dialog {
                     //do some action here
                     SettingsFirstPage.this.show();
                 }
-            });
+            });*/
 
         });
-        //privacy
+
+        //help
         findViewById(R.id.tv_help_settingFragment).setOnClickListener(View->{
-            this.dismiss();
+            /*this.dismiss();
             SubOptionsDialog optionsDialog = new SubOptionsDialog(ctx, R.layout.bottom_sheet_settings_help);
             //settings.show();
 
@@ -247,7 +237,7 @@ public class SettingsFirstPage extends Dialog {
                     SettingsFirstPage.this.show();
                 }
             });
-
+*/
         });
     }
 

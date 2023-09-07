@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.trinkbrunnen.Callback.LocationLoadedCallback;
 import com.example.trinkbrunnen.Callback.StartActivityForResultCallback;
@@ -41,6 +43,7 @@ import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.NetworkLocationIgnorer;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -51,6 +54,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
+import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -72,6 +76,7 @@ public class Map  {
     private IMapController mapController;
     private MyLocationNewOverlay myLocationOverlay;
     private MyLocationNewOverlay myLocationOverlay2;
+    DirectedLocationOverlay directedLocationOverlay;
 
     private MinimapOverlay mMinimapOverlay;
     private ScaleBarOverlay mScaleBarOverlay;
@@ -79,6 +84,10 @@ public class Map  {
 
     private MapEventsOverlay eventsListenerOverlay;
 
+    //A class to check whether we want to use a location.
+    // If there are multiple location providers, i.e. network and GPS,
+    // then you want to ignore network locations shortly after a GPS location because you will get another GPS location soon.
+    private NetworkLocationIgnorer mIgnorer = new NetworkLocationIgnorer();
 
     //addToServer dialog box image view global variable
     ImageView chosenImageDialogBOx;
@@ -114,7 +123,7 @@ public class Map  {
         mapInstance.getMapView().setMultiTouchControls(true);
 
         //change PersonIcon
-        changePersonIcon(R.drawable.ic_navigation_24);
+        changePersonIcon(R.drawable.ic_baseline_person_pin_circle_24);
 
         //only need this for single tap on map closes all open info window
         mapInstance.getMapView().getOverlays().add(
@@ -138,8 +147,10 @@ public class Map  {
 
     }
 
+    double mLastTime = 0.0;
 
     public void enableUserCurrentLocation(LocationLoadedCallback callback, int gpsUpdateTime){
+        addDirectionOverly();
         gpsMyLocationProvider = new GpsMyLocationProvider(mapInstance.getContext());
         gpsMyLocationProvider.setLocationUpdateMinTime(gpsUpdateTime); // [ms] // Set the minimum time interval for location updates
         //gpsMyLocationProvider.setLocationUpdateMinDistance(10000); // [m]  // Set the minimum distance for location updates
@@ -152,18 +163,51 @@ public class Map  {
                 //mapController.setZoom(13f);
                 //mapController.setCenter(new GeoPoint(location));
                 Log.d(TAG, "onLocationChanged: "+location.toString());
-                callback.onLocationLoaded(new GeoPoint(location));
+
+
+                //start new code
+                long currentTime = System.currentTimeMillis();
+                if (mIgnorer.shouldIgnore(location.getProvider(), currentTime))
+                    return;
+                double dT = currentTime - mLastTime;
+                if (dT < 100.0) {
+                    //Toast.makeText(this, pLoc.getProvider()+" dT="+dT, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mLastTime = currentTime;
+
+                if (!directedLocationOverlay.isEnabled()) {
+                    //we get the location for the first time:
+                    directedLocationOverlay.setEnabled(true);
+                    //mapInstance.getMapView().getController().animateTo(newLocation);
+                    callback.onLocationLoaded(location);
+                }
+                callback.onLocationLoaded(location);
+
             }
         };
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setDrawAccuracyEnabled(true);
         //myLocationOverlay.setPersonAnchor(.5f,.5f);
         //most important.
-        myLocationOverlay.enableFollowLocation();
+        //myLocationOverlay.enableFollowLocation();
         mapInstance.getMapView().getOverlays().add(myLocationOverlay);
     }
 
-    public void enableUserCurrentLocation2(int gpsUpdateTime){
+    public void addDirectionOverly(){
+        directedLocationOverlay = new DirectedLocationOverlay(mapInstance.getContext());
+
+        //start   newly added code for direction
+        Drawable iconDrawable =ResourcesCompat.getDrawable(mapInstance.getContext().getResources(), R.drawable.ic_navigation_24, null);
+        // Convert the VectorDrawable to a Bitmap
+        Bitmap iconBitmap = Bitmap.createBitmap(iconDrawable.getIntrinsicWidth(), iconDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        directedLocationOverlay.setDirectionArrow(iconBitmap);
+        mapInstance.getMapView().getOverlays().add(directedLocationOverlay);
+        //end
+
+    }
+
+    public void enableUserCurrentLocation2(LocationLoadedCallback callback, int gpsUpdateTime){
         mapController = mapInstance.getMapView().getController();
 
         gpsMyLocationProvider2 = new GpsMyLocationProvider(mapInstance.getContext());
@@ -181,8 +225,12 @@ public class Map  {
         mapInstance.getMapView().getOverlays().add(myLocationOverlay2);
 
         mapInstance.getMapView().getController().setZoom(15f);
-        mapInstance.getMapView().getController().setCenter(myLocationOverlay2.getMyLocation());
+        //mapInstance.getMapView().getController().setCenter(myLocationOverlay2.getMyLocation());
 
+        if (null!=myLocationOverlay2.getMyLocation()){
+            Log.d(TAG, "enableUserCurrentLocation: "+myLocationOverlay2.getMyLocation());
+            //callback.onLocationLoaded(myLocationOverlay2.getMyLocation());
+        }
     }
 
 
@@ -337,10 +385,11 @@ public class Map  {
         Canvas canvas = new Canvas(iconBitmap);
         iconDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         iconDrawable.draw(canvas);
-        Paint paint = new Paint();
+        /*Paint paint = new Paint();
         ColorFilter filter = new LightingColorFilter(Color.BLACK, Color.BLACK);
         paint.setColorFilter(filter);
         canvas.drawBitmap(iconBitmap, 0, 0, paint);
+        */
         myLocationOverlay.setPersonIcon( iconBitmap);
         myLocationOverlay.setPersonAnchor(.5f,.5f);
     }
@@ -599,8 +648,11 @@ public class Map  {
         return m;
     }
 
+    public DirectedLocationOverlay getDirectedLocationOverlay() {
+        return directedLocationOverlay;
+    }
 
-
-
-
+    public void setDirectedLocationOverlay(DirectedLocationOverlay directedLocationOverlay) {
+        this.directedLocationOverlay = directedLocationOverlay;
+    }
 }

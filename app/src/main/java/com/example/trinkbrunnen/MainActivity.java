@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 
 import com.example.trinkbrunnen.Adaptar.BookmarksAdapter;
 import com.example.trinkbrunnen.Callback.BookmarkReadyCallback;
+import com.example.trinkbrunnen.Model.LocalStorageData;
 import com.example.trinkbrunnen.Model.LocationModel;
 import com.example.trinkbrunnen.Model.DialogPlus;
 import com.example.trinkbrunnen.Model.MapSingleton;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
 
 
     private void initActivity(){
+        //init localStorageData
+         LocalStorageData.getInstance(getApplicationContext());
 
         try {
             this.getSupportActionBar().hide();
