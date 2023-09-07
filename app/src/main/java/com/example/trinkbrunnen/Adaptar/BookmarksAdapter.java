@@ -53,6 +53,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.View
             public void onClick(View view) {
                 //passing the clicked position to the interface
                 //bookmarkLocationArrayList.get(index).getGeoPoint()
+                //onRecViewItemClick is implemented in DialogPlus class
                 recyclerViewClickListener.onRecViewItemClick(bookmarkLocationArrayList.get(index));
             }
         });

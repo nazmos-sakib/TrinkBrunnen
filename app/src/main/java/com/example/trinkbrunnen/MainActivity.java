@@ -40,6 +40,7 @@ import com.example.trinkbrunnen.fragments.MapFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     //
                     mapFragment.removeEventListenerOverlay();
                     mapFragment.hideSearchComponent();
-                    onMapClickRemoveBookmarks();
+                    onMapBottomNavClickRemoveBookmarkMarker();
                     replaceFragment(mapFragment);
                     break;
 
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     mapFragment.removeEventListenerOverlay();
                     mapFragment.hideSearchComponent();
                     if (ParseUser.getCurrentUser()!=null){
-                        //this takes a callback function which will call shoeBookmarkBottomSheet
+                        //this takes a callback function which will call showBookmarkBottomSheet
                         ParseQuarries.fetchBookMarkDataFromServer(this);
                     } else {
                         replaceFragment(new LoginFragment(MainActivity.mapFragment));
@@ -196,11 +197,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
 
         recView_bookmarksFragment.setAdapter(bookmarksAdapter);
         recView_bookmarksFragment.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        //bookmarksAdapter.setAdapterData(fetchDataFromServer());
-        Log.d(TAG, "setRecViewAdapter: "+bookmarksAdapter.getItemCount());
 
-        //this should be the right place to call this function insted of onCreate method
-        //fetchDataFromServer();
         Log.d(TAG, "setRecViewAdapter: "+bookmarksAdapter.getItemCount());
 
         //swipe implement
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         }
     }
 
-    public void onMapClickRemoveBookmarks(){
+    public void onMapBottomNavClickRemoveBookmarkMarker(){
         try {
             List<Overlay> overlays = MapSingleton.getInstance().getMapView().getOverlays();
             for (Overlay o: overlays) {

@@ -82,7 +82,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
     FragmentMapBinding binding;
     Context ctx;
 
-    Map map;
+    public static Map map;
     GeoPoint destination = null;
     public static GeoPoint mapCameraPosition=null;
 
@@ -172,19 +172,6 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         map.initResources();
 
         map.setZoom(15f);
-
-/*
-        if (mapCameraPosition==null){
-            map.setCenter(map.getMyLocationOverlay().getMyLocation());
-        } else {
-            map.setCenter(mapCameraPosition);
-        }
-*/
-
-
-        //map.addZoomScrollListener();
-
-        //binding.map.addOnFirstLayoutListener();
 
 
         //floating action button
@@ -352,6 +339,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
                     Log.d(TAG, "setClickedListener: "+address.getCountryName());
                     map.setZoom(12f);
                     map.setCenter(geoPoint);
+                    //if the distance btn search location and previous location(saved in shared preference) is more than 10kilometer fetch fountain location
                     if(distanceBtnTwoGeoPoint(LocalStorageData.getLocalLocationData(),geoPoint)>10){
                         addFountainMarkersToMapView(geoPoint);
                     }
@@ -387,7 +375,7 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
             binding.edtSearchLocationSearchView.setText("");
             binding.btnClearSearchView.setVisibility(android.view.View.INVISIBLE);
         });
-    }
+    }//end setSearchViewClickedListener
 
     double mSpeed = 0.0;
     float mAzimuthAngleSpeed;
@@ -459,21 +447,18 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
             return;
         }
 
+        //
         azimuCalculation(location);
-
 
         // get the bounding box of the visible area
         BoundingBox boundingBox = map.getMapView().getBoundingBox();
 
         // calculate the visible area in square kilometers
         double area = boundingBox.getLatitudeSpan() * boundingBox.getLongitudeSpan() * Math.cos(Math.toRadians(boundingBox.getCenter().getLatitude())) * 111.319;
-        Log.d(TAG, "getNearByFountainLocation: ->calculating "+area);
-
-
 
     }//end of onLocationLoad()
 
-    private void addFountainMarkersToMapView(GeoPoint location){
+    public void addFountainMarkersToMapView(GeoPoint location){
         ParseQuarries.fetchFountainLocation(location,
                 (objects)->{
 
@@ -845,4 +830,5 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
 
         return Math.sqrt(distance);
     }
+
 }
