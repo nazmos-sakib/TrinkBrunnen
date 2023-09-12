@@ -25,8 +25,17 @@ Never worry about finding water sources during your outdoor adventures, city wal
 
 ## Screenshots of the app
 
-| <img src="docs_resources/filelist_device.png"> | <img src="docs_resources/photos_device.png"> | <img src="docs_resources/share_device.png"> | <img src="docs_resources/spaces_device.png"> |
+| <img src="app/SchreenShots/Screenshot_20230912-214357.png"> | <img src="app/SchreenShots/Screenshot_20230912-214406.png">  | <img src="app/SchreenShots/Screenshot_20230912-214433.png">  | <img src="app/SchreenShots/Screenshot_20230912-214444.png">  | <img src="app/SchreenShots/Screenshot_20230912-214453.png"> |
+| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+
+
+|  <img src="app/SchreenShots/Screenshot_20230912-214504.png">  | <img src="app/SchreenShots/Screenshot_20230912-214513.png">  | <img src="app/SchreenShots/Screenshot_20230912-214523.png">  | <img src="app/SchreenShots/Screenshot_20230912-214541.png"> |
 | ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+
+|  <img src="app/SchreenShots/Screenshot_20230912-214616.png">  | <img src="app/SchreenShots/Screenshot_20230912-214702.png">  | <img src="app/SchreenShots/Screenshot_20230912-214754.png">  | <img src="app/SchreenShots/Screenshot_20230912-214819.png"> | <img src="app/SchreenShots/Screenshot_20230912-214824.png">  | 
+| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- | 
+
+
 
 
 Android Build
