@@ -2,6 +2,7 @@ package com.example.trinkbrunnen.fragments.Authentication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -23,8 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.trinkbrunnen.MainActivity;
 import com.example.trinkbrunnen.R;
 import com.example.trinkbrunnen.databinding.FragmentLoginBinding;
+import com.example.trinkbrunnen.fragments.MapFragment;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -37,10 +40,10 @@ public class LoginFragment extends Fragment {
     private static final String TAG = "LoginFragment->";
     private FragmentLoginBinding binding;
 
-    Fragment returnFragment;
+    MapFragment returnFragment;
 
 
-    public LoginFragment( Fragment returnFragment) {
+    public LoginFragment(MapFragment returnFragment) {
         // Required empty public constructor
         this.returnFragment = returnFragment;
     }
@@ -81,9 +84,11 @@ public class LoginFragment extends Fragment {
                         if (user != null){
                             Toast.makeText(getActivity().getApplicationContext(),"login successful", Toast.LENGTH_SHORT).show();
 
+                            MainActivity.mapFragment = new MapFragment(MainActivity.baseContext);
                             getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragmentContainer_mainActivity, returnFragment)
+                                    .replace(R.id.fragmentContainer_mainActivity, MainActivity.mapFragment)
                                     .commit();
+                            //returnFragment.onReload();
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
                         }

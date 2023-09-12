@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
     //list of fragments
     public static MapFragment mapFragment;
 
+    public static Context baseContext;
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -99,7 +102,9 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         //Map.getInstance(this,findViewById(R.id.mapViewMapFragment));
 
         //fragments init
-        mapFragment = new MapFragment(this);
+        MainActivity.mapFragment = new MapFragment(this);
+
+        MainActivity.baseContext = this;
 
         //load default map fragment
         replaceFragment(mapFragment);
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
                     mapFragment.hideSearchComponent();
                     onMapBottomNavClickRemoveBookmarkMarker();
                     replaceFragment(mapFragment);
+                    mapFragment.onReloadFragment();
                     break;
 
                 case R.id.menu_items_save:
@@ -313,4 +319,6 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
             e.printStackTrace();
         }
     }
+
+    public void UnusedFunction(){}
 }

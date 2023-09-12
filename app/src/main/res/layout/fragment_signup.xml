@@ -21,35 +21,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/ev_email_signupFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_fountain_signupFragment" />
-
-    <EditText
-        android:id="@+id/ev_password_signupFragment"
+        android:id="@+id/ev_password_loginFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColorHint="#78909C"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,9 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/name"
         android:inputType="textPersonName"
@@ -70,23 +50,22 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ev_password_signupFragment" />
+        app:layout_constraintTop_toBottomOf="@+id/img_fountain_signupFragment" />
 
     <EditText
-        android:id="@+id/ev_address_signupFragment"
+        android:id="@+id/ev_email_signupFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
-        android:autofillHints=""
         android:ems="10"
-        android:hint="Address"
-        android:inputType="textPersonName"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
         android:minHeight="48dp"
+        android:textColorHint="#78909C"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ev_name_signupFragment" />
 
@@ -97,84 +76,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="480dp" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout_imageAvatar_signupFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2">
-
-        <ImageView
-            android:id="@+id/avatar_male_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/img_avatar_male_1" />
-
-        <ImageView
-            android:id="@+id/avatar_female_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/avatar_female_1"
-            tools:ignore="ImageContrastCheck" />
-
-        <ImageView
-            android:id="@+id/avatar_female_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/avatar_female_2" />
-
-        <ImageView
-            android:id="@+id/avatar_female_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="0"
-            android:src="@drawable/avatar_female_3" />
-
-        <ImageView
-            android:id="@+id/avatar_male_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/male_avatar_3"
-            android:src="@drawable/img_avatar_male_3" />
-
-        <ImageView
-            android:id="@+id/avatar_male_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="0"
-            android:contentDescription="@string/male_avatar_4"
-            android:src="@drawable/img_avatar_male_2" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/btn_register_signupFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
         android:backgroundTint="@color/register"
         android:text="@string/register"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout_imageAvatar_signupFragment"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="TextContrastCheck" />
 
     <TextView

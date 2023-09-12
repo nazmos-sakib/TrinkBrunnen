@@ -831,4 +831,9 @@ public class MapFragment extends Fragment implements LocationLoadedCallback, Upl
         return Math.sqrt(distance);
     }
 
+    public void onReloadFragment(){
+        map.setZoom(16f);
+        map.setCenter(map.getMyLocationOverlay().getMyLocation());
+    }
+
 }

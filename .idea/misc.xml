@@ -4,13 +4,22 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.263189448441247" />
+        <entry key="../../.gradle/caches/transforms-3/362e26209f76e4ca41f12e4798a6c99d/transformed/osmdroid-android-6.1.16/res/layout/bonuspack_bubble.xml" value="0.39114583333333336" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable-v24/ic_logout_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable-v24/settings_linearlayout_border.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/background_speed_text_view.xml" value="0.39" />
         <entry key="app/src/main/res/drawable/bg_circular.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/bookmark_bottom_sheet_bg.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/bookmark_linearlayout_border.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/floating_button_bg.xml" value="0.2025" />
         <entry key="app/src/main/res/drawable/ic_add_location_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.2265" />
         <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_dark_mode_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_darkmode_on_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_display_settings_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_pin_circle_24.xml" value="0.3" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_bookmarks_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_clear_24.xml" value="0.194" />
@@ -21,6 +30,7 @@
         <entry key="app/src/main/res/drawable/ic_direction_turn_slight_left_3.xml" value="0.194" />
         <entry key="app/src/main/res/drawable/ic_direction_turn_slight_right_6.xml" value="0.194" />
         <entry key="app/src/main/res/drawable/ic_directions_black.xml" value="0.194" />
+        <entry key="app/src/main/res/drawable/ic_image_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_layers_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_logout_24.xml" value="0.3765" />
@@ -30,24 +40,51 @@
         <entry key="app/src/main/res/drawable/ic_push_pin_red.xml" value="0.145" />
         <entry key="app/src/main/res/drawable/ic_search_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_settings_24.xml" value="0.3765" />
+        <entry key="app/src/main/res/drawable/ic_upload_24.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/ic_water_drop_24.xml" value="0.145" />
         <entry key="app/src/main/res/drawable/mapbox_ic_customize.xml" value="0.2025" />
         <entry key="app/src/main/res/drawable/searchbox_roundcorner.xml" value="0.3765" />
         <entry key="app/src/main/res/drawable/zoom_button_bg_top_round.xml" value="0.3755" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29259259259259257" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1675925925925926" />
         <entry key="app/src/main/res/layout/activity_mapbox_test_navigation.xml" value="0.30833333333333335" />
         <entry key="app/src/main/res/layout/activity_permission_denied.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/bookmark_bottom_sheet_layout.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/bookmark_bottom_sheet_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/bookmark_recycle_view.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/bottom_sheet_setings_user_details.xml" value="0.39010416666666664" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_about_us.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_check.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_contributions.xml" value="0.275" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_contributions_rec_view_card.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_first_page.xml" value="0.36666666666666664" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_help.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_log_in.xml" value="0.39114583333333336" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_my_fav_place.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_offline_map.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_privecy.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_settings.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_share_my_location.xml" value="0.17407407407407408" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_sign_up.xml" value="0.39010416666666664" />
+        <entry key="app/src/main/res/layout/bottom_sheet_settings_user_details.xml" value="0.39114583333333336" />
+        <entry key="app/src/main/res/layout/details_form_upload_to_server_dialog.xml" value="0.19479166666666667" />
+        <entry key="app/src/main/res/layout/dialog_details_form_upload_to_server.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_map_fragment_direction_edit_bookmark_clear.xml" value="0.1787037037037037" />
         <entry key="app/src/main/res/layout/fragment_bookmarks.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_fullscreen.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2833200073242188" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_map_box_navigation.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_settings_fragments.xml" value="0.15126050420168066" />
         <entry key="app/src/main/res/layout/fragment_show_bookmark.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.39114583333333336" />
         <entry key="app/src/main/res/layout/fragment_test.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/map_fragment_direction_add_clear_dialog.xml" value="0.21979166666666666" />
+        <entry key="app/src/main/res/layout/map_fragment_direction_bookmark_clear_dialog.xml" value="0.17962962962962964" />
         <entry key="app/src/main/res/layout/map_fragment_direction_clear_dialog.xml" value="0.19722222222222222" />
         <entry key="app/src/main/res/layout/map_fragment_direction_clear_dialog_2.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/layout/marker_custom_info_window.xml" value="0.39010416666666664" />
+        <entry key="app/src/main/res/layout/settings.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/settings2.xml" value="0.29635416666666664" />
+        <entry key="app/src/main/res/layout/test_layout.xml" value="0.25462962962962965" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/menu/main_activity_toolbar_menue.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/menu/menu_map_layout_option.xml" value="0.37604166666666666" />

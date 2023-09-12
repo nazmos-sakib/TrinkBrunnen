@@ -1,5 +1,6 @@
 package com.example.trinkbrunnen.Model;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +19,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ParseQuarries {
@@ -226,5 +229,31 @@ public class ParseQuarries {
             }
         });
 
+    } //end alterFountainData()
+
+    public static void sighUp(String name,String email,String pass,Callback callback){
+
+        ParseUser user = new ParseUser();
+        // Set the user's username and password, which can be obtained by a forms
+        user.setUsername(name);
+        user.setEmail(email);
+        user.setPassword(pass);
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                Bundle b = new Bundle();
+                if (e == null) {
+                    b.putBoolean("succ",true);
+                    callback.onCallback((Bundle)b);
+                } else {
+                    ParseUser.logOut();
+                    b.putBoolean("succ",false);
+                    b.putString("message",e.getMessage());
+                    callback.onCallback((Bundle)b);
+                }
+            }
+        });
+
     }
+
 }
