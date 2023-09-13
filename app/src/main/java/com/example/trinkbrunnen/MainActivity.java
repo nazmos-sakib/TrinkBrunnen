@@ -320,5 +320,4 @@ public class MainActivity extends AppCompatActivity implements BookmarkReadyCall
         }
     }
 
-    public void UnusedFunction(){}
 }

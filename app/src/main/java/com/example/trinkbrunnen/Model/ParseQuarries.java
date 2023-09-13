@@ -81,7 +81,7 @@ public class ParseQuarries {
         });
 
     }
-    public static void fetchContributionsDataFromServer(Callback callback){
+    public static <arrayList> void fetchContributionsDataFromServer(Callback callback){
         ArrayList<LocationModel> arrayList = new ArrayList<>();
         ParseUser currentUser = ParseUser.getCurrentUser();
         //SELECT * FROM 'TABLE' WHERE 'COLUMN' = 'VALUE' LIMIT 1 ; --implementation
@@ -112,13 +112,51 @@ public class ParseQuarries {
                             arrayList.add(b);
                         }
 
-                        callback.onCallback((ArrayList<LocationModel>) arrayList);
+                        //callback.onCallback((ArrayList<LocationModel>) arrayList);
 
                     }
                 }
 
             }
         });
+
+        ParseQuery<ParseObject> query2  = new ParseQuery<ParseObject>("fountainLocation");
+        query2.orderByDescending("createdAt");
+        query2.whereEqualTo("userWhoUpdatedThis",currentUser.getObjectId());
+        query2.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null){
+                    Log.d(TAG, "done: "+objects.size());
+                    if (objects.size()>0){
+                        for (ParseObject object:objects){
+                            //Log.d(TAG, "done: "+object.toString());
+                            LocationModel b = new LocationModel(
+                                    object.getObjectId(),
+                                    object.getString("userWhoAddedThis"),
+                                    object.getString("title"),
+                                    object.getString("description"),
+                                    object.getBoolean("isCurrentlyActive"),
+                                    object.getCreatedAt().toString(),
+                                    new GeoPoint(
+                                            object.getParseGeoPoint("location").getLatitude(),
+                                            object.getParseGeoPoint("location").getLongitude()
+                                    ),
+                                    object.getParseFile("image")
+                            );
+                            arrayList.add(b);
+                        }
+
+                        callback.onCallback((ArrayList<LocationModel>) arrayList);
+
+                    }
+                }
+
+            }
+
+        });
+
+        //callback.onCallback((ArrayList<LocationModel>) arrayList);
 
     }
 
