@@ -113,8 +113,6 @@ User Data collection
 To save a location in you bookmark and/or to add a new fountain location one must create a user account with ***name, email*** and ***password***
 Name and Email is ***visible*** to database admin but ***password*** is ***encrypted*** and ***not visible*** to database admin.
 
-While signing up one can provide their address but it is never stored in database.
-
 
 Note
 ====
