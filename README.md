@@ -1,6 +1,17 @@
 # [TrinkBrunnen:Stay Hydrated with Ease]() Android App  📱
 <a href=""><img src="app/src/main/res/mipmap-hdpi/ic_launcher.png?raw=true" height="70"></a> <a href=""><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
 
+
+<img align="left" alt="java" height="25px" src="https://upload.wikimedia.org/wikipedia/de/e/e1/Java-Logo.svg" />
+<img align="left" alt="kotlin" height="25px" src="https://upload.wikimedia.org/wikipedia/commons/0/06/Kotlin_Icon.svg" />
+<img align="left" alt="gradle" height="25px" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Gradle_logo.svg" />
+<img align="left" alt="android studio" height="25px" src="https://upload.wikimedia.org/wikipedia/commons/5/55/Android_Studio_Logo_%282023%29.svg" />
+<img align="left" alt="Parse" height="25px" src="https://parseplatform.org/img/logo.svg" />
+<br/>
+<br/>
+<br/>
+
+
 Trinkbrunnen is your ideal companion for staying hydrated while exploring the city. Designed with simplicity and convenience in mind, this Android app empowers users to discover, save, and even contribute to the ever-growing list of public drinking fountains. Whether you're a local or a traveler, Trinkbrunnen makes sure you never go thirsty again.
 
 Key Features:
@@ -86,7 +97,7 @@ osmdroid's MapView is basically a replacement for Google's MapView class. It als
 osmdroid is a library to interact with OpenStreetMap data inside an Android application. It offers an almost full/free replacement to Android map objects: MapView, MapController, Overlays, etc.
 The OSMNavigator application demonstrates the use of these classes. This is a generic-purpose Map/Navigation tool, including a KML viewer and editor.
 
-[Parse Framework](https://parseplatform.org)
+[Framework](https://parseplatform.org)   <img align="left" alt="Parse" height="25px" src="https://parseplatform.org/img/logo.svg" />
 =======
 Parse is the most used open-source framework to develop application backends. It helps developers to accelerate app development and reduces the total amount of effort required to build an app. A large community of engaged developers supports the platform and has been evolving it since 2016.  It’s a great tool to develop apps quickly and under an affordable budget.
 
