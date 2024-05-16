@@ -1,5 +1,5 @@
 # [TrinkBrunnen:Stay Hydrated with Ease]() Android App  📱
-<a href=""><img src="app/src/main/res/mipmap-hdpi/ic_launcher.png?raw=true" height="70"></a> <a href=""><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
+<a href=""><img src="app/src/main/res/mipmap-hdpi/ic_launcher.png?raw=true" height="70"></a> <a href=""><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="60"></a>
 
 
 <img align="left" alt="java" height="25px" src="https://upload.wikimedia.org/wikipedia/de/e/e1/Java-Logo.svg" />
