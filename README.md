@@ -35,17 +35,22 @@ Never worry about finding water sources during your outdoor adventures, city wal
 
 
 ## Screenshots of the app
-
-| <img src="app/SchreenShots/Screenshot_20230912-214357.png"> | <img src="app/SchreenShots/Screenshot_20230912-214406.png">  | <img src="app/SchreenShots/Screenshot_20230912-214433.png">  | <img src="app/SchreenShots/Screenshot_20230912-214444.png">  | <img src="app/SchreenShots/Screenshot_20230912-214453.png"> |
-| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-
-
-|  <img src="app/SchreenShots/Screenshot_20230912-214504.png">  | <img src="app/SchreenShots/Screenshot_20230912-214513.png">  | <img src="app/SchreenShots/Screenshot_20230912-214523.png">  | <img src="app/SchreenShots/Screenshot_20230912-214541.png"> |
-| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-
-|  <img src="app/SchreenShots/Screenshot_20230912-214616.png">  | <img src="app/SchreenShots/Screenshot_20230912-214702.png">  | <img src="app/SchreenShots/Screenshot_20230912-214754.png">  | <img src="app/SchreenShots/Screenshot_20230912-214819.png"> | <img src="app/SchreenShots/Screenshot_20230912-214824.png">  | 
-| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- | 
-
+<p align="center">
+  <img src="app/SchreenShots/Screenshot_20230912-214357.png" alt="Image 1" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214406.png" alt="Image 2" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214433.png" alt="Image 3" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214444.png" alt="Image 4" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214453.png" alt="Image 5" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214504.png" alt="Image 6" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214513.png" alt="Image 7" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214523.png" alt="Image 8" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214541.png" alt="Image 9" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214616.png" alt="Image 10" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214702.png" alt="Image 11" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214754.png" alt="Image 12" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214819.png" alt="Image 13" width="200" style="margin: 20px;"/>
+  <img src="app/SchreenShots/Screenshot_20230912-214824.png" alt="Image 14" width="200" style="margin: 20px;"/>
+</p>
 
 
 
